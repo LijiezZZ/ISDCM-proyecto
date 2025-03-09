@@ -8,6 +8,6 @@ package modelo;
  *
  * @author alumne
  */
-public class video {
+public class Video {
     
 }
