@@ -31,7 +31,8 @@ public class servletUsuarios extends HttpServlet {
         String action = request.getParameter("action");
 
         if (action == null) {
-            response.sendRedirect("vista/login.jsp");
+            request.setAttribute("error", "Acción no válida.");
+            request.getRequestDispatcher("vista/login.jsp").forward(request, response);
             return;
         }
 
@@ -51,16 +52,19 @@ public class servletUsuarios extends HttpServlet {
     }
 
     private void handleLogin(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        // Obtener los parámetros del formulario de login
         String username = request.getParameter("username");
         String password = request.getParameter("password");
 
         UsuarioDAO usuarioDAO = new UsuarioDAO();
         Usuario user = usuarioDAO.authenticateUser(username, password);
 
+        // Existe el usuario en base de datos
         if (user != null) {
             HttpSession session = request.getSession();
             session.setAttribute("user", user);
             response.sendRedirect("vista/listadoVid.jsp");
+        // Username o contraseña incorrectos
         } else {
             request.setAttribute("error", "Usuario o contraseña incorrectos.");
             request.getRequestDispatcher("vista/login.jsp").forward(request, response);
@@ -73,6 +77,7 @@ public class servletUsuarios extends HttpServlet {
     }
 
     private void handleRegister(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        // Obtener los parámetros del formulario de registro
         String firstName = request.getParameter("nombre");
         String lastName = request.getParameter("apellidos");
         String email = request.getParameter("email");
@@ -80,29 +85,38 @@ public class servletUsuarios extends HttpServlet {
         String password = request.getParameter("password");
         String confirmPassword = request.getParameter("confirm_password");
 
+        // COmprobar si las contraseñas coinciden
         if (password == null || !password.equals(confirmPassword)) {
             request.setAttribute("error", "Las contraseñas no coinciden.");
             request.getRequestDispatcher("vista/registroUsu.jsp").forward(request, response);
+            return;
         }
 
+        // Crear el objeto Usuario con los datos del formulario
         Usuario user = new Usuario(firstName, lastName, email, username, password, 0);
         UsuarioDAO usuarioDAO = new UsuarioDAO();
 
+        // Comprobar si el email ya está registrado
         if (usuarioDAO.isEmailRegistered(user.getEmail())) {
             request.setAttribute("error", "El email ya está registrado por otro usuario.");
             request.getRequestDispatcher("vista/registroUsu.jsp").forward(request, response);
+            return;
         }
 
+        // Comprobar si el username ya está registrado
         if (usuarioDAO.isUsernameRegistered(user.getUsername())) {
             request.setAttribute("error", "El username ya está registrado por otro usuario.");
             request.getRequestDispatcher("vista/registroUsu.jsp").forward(request, response);
+            return;
         }
-
+        
+        //INtentar registrar el usuario en la base de datos
         if (usuarioDAO.registerUser(user)) {
             response.sendRedirect("vista/login.jsp?success=1");
         } else {
             request.setAttribute("error", "No se pudo completar el registro.");
             request.getRequestDispatcher("vista/registroUsu.jsp").forward(request, response);
+            return;
         }
 
     }
