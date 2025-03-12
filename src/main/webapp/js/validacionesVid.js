@@ -8,7 +8,7 @@ document.addEventListener("DOMContentLoaded", function () {
     const form = document.getElementById("videoForm");
     const videoFileInput = document.getElementById("videoFile");
     const tituloInput = document.getElementById("titulo");
-    const fechaInput = document.getElementById("fecha");
+    const fechaInput = document.getElementById("fechaCreacion");
     const duracionInput = document.getElementById("duracion");
     const formatoInput = document.getElementById("formato");
 
@@ -18,11 +18,13 @@ document.addEventListener("DOMContentLoaded", function () {
         const year = now.getFullYear();
         const month = String(now.getMonth() + 1).padStart(2, '0');
         const day = String(now.getDate()).padStart(2, '0');
-        return `${year}/${month}/${day}`;
+        return `${year}-${month}-${day}`;
     }
 
     // Establecer la fecha de creación automáticamente
-    fechaInput.value = getFormattedDate();
+    if (!fechaInput.value) { // Si está vacío, lo llenamos
+        fechaInput.value = getFormattedDate();
+    }
 
     videoFileInput.addEventListener("change", function (event) {
         const file = event.target.files[0];
@@ -34,10 +36,9 @@ document.addEventListener("DOMContentLoaded", function () {
             video.onloadedmetadata = function () {
                 window.URL.revokeObjectURL(video.src);
 
-                // Obtener metadatos
+                // Obtener metadatos 
                 tituloInput.value = file.name.replace(/\.[^/.]+$/, ""); // Nombre del archivo sin extensión
-                formatoInput.value = file.type.split("/")[1].toUpperCase(); // Formato del video en mayúsculas
-
+                formatoInput.value = file.type.split("/")[1]; // Formato del video
                 // Convertir la duración a formato HH:MM:SS
                 const totalSeconds = Math.floor(video.duration);
                 const hours = String(Math.floor(totalSeconds / 3600)).padStart(2, '0');
@@ -45,7 +46,6 @@ document.addEventListener("DOMContentLoaded", function () {
                 const seconds = String(totalSeconds % 60).padStart(2, '0');
                 duracionInput.value = `${hours}:${minutes}:${seconds}`;
             };
-
             video.src = URL.createObjectURL(file);
         }
     });
