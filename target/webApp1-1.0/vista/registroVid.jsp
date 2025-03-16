@@ -87,7 +87,7 @@
                 </form>
 
                 <div class="text-center mt-3">
-                    <a href="listadoVid.jsp" class="btn btn-secondary w-100">Volver al listado</a>
+                    <a href="${pageContext.request.contextPath}/servletListadoVid" class="btn btn-secondary w-100">Volver al listado</a>
                 </div>
             </div>
         </div>

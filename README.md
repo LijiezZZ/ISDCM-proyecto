@@ -1,2 +1,2 @@
-Proyecte de la asignatura ISDCM.
+Proyecto de la asignatura ISDCM.
 Integrantes: Lijie Yin, Kenny Alejandro

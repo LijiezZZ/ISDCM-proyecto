@@ -27,6 +27,18 @@ public class servletUsuarios extends HttpServlet {
     private static final String REGISTER = "register";
 
     @Override
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        String action = request.getParameter("action");
+
+        if (LOGOUT.equals(action)) {
+            handleLogout(request, response); // Llamar al handleLogout
+        } else {
+            response.sendRedirect("vista/login.jsp");
+        }
+    }
+    
+    
+    @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String action = request.getParameter("action");
 
@@ -63,7 +75,7 @@ public class servletUsuarios extends HttpServlet {
         if (user != null) {
             HttpSession session = request.getSession();
             session.setAttribute("user", user);
-            response.sendRedirect("vista/listadoVid.jsp");
+            response.sendRedirect(request.getContextPath() + "/servletListadoVid");
         // Username o contraseña incorrectos
         } else {
             request.setAttribute("error", "Usuario o contraseña incorrectos.");

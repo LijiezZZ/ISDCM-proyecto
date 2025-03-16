@@ -17,25 +17,30 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.sql.Timestamp;
+import java.util.ArrayList;
+import java.util.List;
 
 public class VideoDAO {
 
     public boolean registerVideo(Video video) {
         boolean isRegistered = false;
 
-        String sql = "INSERT INTO VIDEOS (TITULO, AUTOR, FECHACREACION, CREACIONTIMESTAMP, DURACION, NUMREPRODUCCIONES, DESCRIPCION, FORMATO, LOCALIZACION, USERID) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO VIDEOS (TITULO, AUTOR, FECHACREACION, CREACIONTIMESTAMP, DURACION, NUMREPRODUCCIONES, DESCRIPCION, FORMATO, LOCALIZACION, USERID, MODIFICACIONTIMESTAMP) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?,?)";
         try (Connection conn = ConexionDB.getConnection(); PreparedStatement stmt = conn.prepareStatement(sql)) {
 
             stmt.setString(1, video.getTitulo());
             stmt.setString(2, video.getAutor());
             stmt.setDate(3, video.getFechaCreacion());
-            stmt.setTimestamp(4, video.getCreacionTimestamp());
+            Timestamp currentTimestamp = new Timestamp(System.currentTimeMillis());
+            stmt.setTimestamp(4, currentTimestamp);
             stmt.setTime(5, video.getDuracion());
             stmt.setInt(6, video.getNumReproducciones());
             stmt.setString(7, video.getDescripcion());
             stmt.setString(8, video.getFormato());
             stmt.setString(9, video.getLocalizacion());
             stmt.setInt(10, video.getUserId());
+            stmt.setTimestamp(11, currentTimestamp);
 
             int rowsInserted = stmt.executeUpdate();
             if (rowsInserted > 0) {
@@ -70,5 +75,54 @@ public class VideoDAO {
         }
         return exists;
     }
+    
+    
+    public List<Video> getAllVideos() {
+     System.out.println("Obtener Videos ");  // Depuración
 
+    List<Video> videos = new ArrayList<>();
+    String sql = "SELECT * FROM VIDEOS";
+        try (Connection conn = ConexionDB.getConnection(); PreparedStatement stmt = conn.prepareStatement(sql)) {
+            ResultSet rs = stmt.executeQuery();
+            while (rs.next()) {
+                Video video = new Video(
+                    rs.getInt("ID"),
+                    rs.getString("TITULO"),
+                    rs.getString("AUTOR"),
+                    rs.getDate("FECHACREACION"),
+                    rs.getTimestamp("CREACIONTIMESTAMP"),
+                    rs.getTimestamp("MODIFICACIONTIMESTAMP"),
+                    rs.getTime("DURACION"),
+                    rs.getInt("NUMREPRODUCCIONES"),
+                    rs.getString("DESCRIPCION"),
+                    rs.getString("FORMATO"),
+                    rs.getString("LOCALIZACION"),
+                    rs.getInt("USERID")
+                );
+                videos.add(video);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return videos;
+    }
+    
+    public boolean deleteVideo(int videoId) {
+        boolean isDeleted = false;
+        String sql = "DELETE FROM VIDEOS WHERE ID = ?";
+
+        try (Connection conn = ConexionDB.getConnection(); PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setInt(1, videoId);
+
+            int rowsAffected = stmt.executeUpdate();
+            if (rowsAffected > 0) {
+                isDeleted = true;
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return isDeleted;
+    }
 }

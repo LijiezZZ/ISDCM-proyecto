@@ -42,7 +42,6 @@ public class servletRegistroVid extends HttpServlet {
 
         // Conversión de los parámetros a los tipos correspondientes
         Date creationDateDateFormat = Date.valueOf(creationDate);
-        Timestamp creationTimestamp = new Timestamp(System.currentTimeMillis());
         Time durationTimeFormat = Time.valueOf(duration);
         
         // Ruta de localización del video
@@ -60,7 +59,7 @@ public class servletRegistroVid extends HttpServlet {
         Integer userId = user.getId();
 
         // Crear el objeto Video con los datos obtenidos del formulario
-        Video video = new Video(title, author, creationDateDateFormat, creationTimestamp, durationTimeFormat, 0, description, format, localization, userId);
+        Video video = new Video(title, author, creationDateDateFormat, durationTimeFormat, 0, description, format, localization, userId);
         VideoDAO videoDAO = new VideoDAO();
 
         // Comprobar si el video ya ha sido registrado por este usuario
@@ -72,7 +71,7 @@ public class servletRegistroVid extends HttpServlet {
         
         // Intentar registrar el video en la base de datos
         if (videoDAO.registerVideo(video)) {
-            response.sendRedirect("vista/listadoVid.jsp");
+            response.sendRedirect(request.getContextPath() + "/servletListadoVid");
         } else {
             request.setAttribute("error", "No se pudo completar el registro");
             request.getRequestDispatcher("vista/registroVid.jsp").forward(request, response);
