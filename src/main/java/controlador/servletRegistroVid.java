@@ -72,7 +72,7 @@ public class servletRegistroVid extends HttpServlet {
         
         // Intentar registrar el video en la base de datos
         if (videoDAO.registerVideo(video)) {
-            response.sendRedirect("vista/listadoVid.jsp");
+            response.sendRedirect(request.getContextPath() + "/servletListadoVid");
         } else {
             request.setAttribute("error", "No se pudo completar el registro");
             request.getRequestDispatcher("vista/registroVid.jsp").forward(request, response);
