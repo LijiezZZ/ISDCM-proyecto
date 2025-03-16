@@ -53,9 +53,61 @@
         <div class="container-fluid mt-4">
             <h2 class="text-center">Listado de Videos</h2>
             
+            <!-- Mostrar mensaje de éxito -->
+        <c:if test="${not empty message}">
+            <div class="alert alert-success alert-dismissible fade show" role="alert">
+                 ${message}
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+            <script>
+                // Ocultar el mensaje después de 10 segundos
+                setTimeout(function() {
+                    var alertElement = document.querySelector('.alert-success');
+                    if (alertElement) {
+                        alertElement.style.display = 'none';
+                    }
+                }, 10000);
+            </script>
+        </c:if>
+
+        <!-- Mostrar mensaje de error -->
+        <c:if test="${not empty error}">
+            <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                <strong>Error:</strong> ${error}
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+            <script>
+                // Ocultar el mensaje después de 10 segundos
+                setTimeout(function() {
+                    var alertElement = document.querySelector('.alert-danger');
+                    if (alertElement) {
+                        alertElement.style.display = 'none';
+                    }
+                }, 10000);
+            </script>
+        </c:if>
+
+        <!-- Mostrar mensaje de advertencia -->
+            <c:if test="${not empty warning}">
+                <div class="alert alert-warning alert-dismissible fade show" role="alert">
+                    <strong>Advertencia:</strong> ${warning}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+                <script>
+                    // Ocultar el mensaje después de 10 segundos
+                    setTimeout(function() {
+                        var alertElement = document.querySelector('.alert-warning');
+                        if (alertElement) {
+                            alertElement.style.display = 'none';
+                        }
+                    }, 10000);
+                </script>
+            </c:if>
              <!-- Botón para agregar nuevo video -->
-            <div class="mb-3 text-end">
-                <a href="vista/registroVid.jsp" class="btn btn-success">Agregar Video</a>
+            <div class=" mb-1 text-end">
+                <a href="vista/registroVid.jsp" class="btn btn-black">
+                    <i class="fas fa-plus"></i>
+                </a>
             </div>
              <div class="table-responsive" style="height: calc(100vh - 200px);">
                 <table class="table table-striped table-bordered mt-3">

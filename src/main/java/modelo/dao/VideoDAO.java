@@ -17,6 +17,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -25,19 +26,21 @@ public class VideoDAO {
     public boolean registerVideo(Video video) {
         boolean isRegistered = false;
 
-        String sql = "INSERT INTO VIDEOS (TITULO, AUTOR, FECHACREACION, CREACIONTIMESTAMP, DURACION, NUMREPRODUCCIONES, DESCRIPCION, FORMATO, LOCALIZACION, USERID) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO VIDEOS (TITULO, AUTOR, FECHACREACION, CREACIONTIMESTAMP, DURACION, NUMREPRODUCCIONES, DESCRIPCION, FORMATO, LOCALIZACION, USERID, MODIFICACIONTIMESTAMP) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?,?)";
         try (Connection conn = ConexionDB.getConnection(); PreparedStatement stmt = conn.prepareStatement(sql)) {
 
             stmt.setString(1, video.getTitulo());
             stmt.setString(2, video.getAutor());
             stmt.setDate(3, video.getFechaCreacion());
-            stmt.setTimestamp(4, video.getCreacionTimestamp());
+            Timestamp currentTimestamp = new Timestamp(System.currentTimeMillis());
+            stmt.setTimestamp(4, currentTimestamp);
             stmt.setTime(5, video.getDuracion());
             stmt.setInt(6, video.getNumReproducciones());
             stmt.setString(7, video.getDescripcion());
             stmt.setString(8, video.getFormato());
             stmt.setString(9, video.getLocalizacion());
             stmt.setInt(10, video.getUserId());
+            stmt.setTimestamp(11, currentTimestamp);
 
             int rowsInserted = stmt.executeUpdate();
             if (rowsInserted > 0) {
@@ -88,6 +91,7 @@ public class VideoDAO {
                     rs.getString("AUTOR"),
                     rs.getDate("FECHACREACION"),
                     rs.getTimestamp("CREACIONTIMESTAMP"),
+                    rs.getTimestamp("MODIFICACIONTIMESTAMP"),
                     rs.getTime("DURACION"),
                     rs.getInt("NUMREPRODUCCIONES"),
                     rs.getString("DESCRIPCION"),
