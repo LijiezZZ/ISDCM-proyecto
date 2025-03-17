@@ -17,6 +17,12 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
+import jakarta.servlet.http.Part;
+import java.io.File;
+import java.io.InputStream;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 import java.sql.Date;
 import java.sql.Time;
 import java.sql.Timestamp;
@@ -43,7 +49,7 @@ public class servletRegistroVid extends HttpServlet {
         // Conversión de los parámetros a los tipos correspondientes
         Date creationDateDateFormat = Date.valueOf(creationDate);
         Time durationTimeFormat = Time.valueOf(duration);
-        
+
         // Ruta de localización del video
         String localization = "/videosRegistrados/" + title + "." + format;
 
@@ -53,7 +59,7 @@ public class servletRegistroVid extends HttpServlet {
             response.sendRedirect("vista/login.jsp");
             return;
         }
-        
+
         // Obtener el objeto Usuario de la sesión
         Usuario user = (Usuario) session.getAttribute("user");
         Integer userId = user.getId();
@@ -68,9 +74,11 @@ public class servletRegistroVid extends HttpServlet {
             request.getRequestDispatcher("vista/registroVid.jsp").forward(request, response);
             return;
         }
-        
+
         // Intentar registrar el video en la base de datos
         if (videoDAO.registerVideo(video)) {
+            // Guardar el video en la carpeta /videosRegistrados
+            saveVideoFile(request.getPart("videoFile"), title + "." + format);
             response.sendRedirect(request.getContextPath() + "/servletListadoVid");
         } else {
             request.setAttribute("error", "No se pudo completar el registro");
@@ -79,4 +87,30 @@ public class servletRegistroVid extends HttpServlet {
         }
     }
 
+    private void saveVideoFile(Part filePart, String filename) throws ServletException, IOException {
+        String uploadsDir = "/home/alumne/NetBeansProjects/ISDCM-proyecto/videosRegistrados";
+        System.out.println("Ruta de los archivos: " + uploadsDir);
+        File uploadDir = new File(uploadsDir);
+
+        // Si no existe la carpeta, créala
+        if (!uploadDir.exists()) {
+            uploadDir.mkdirs();
+        }
+
+        if (filePart == null) {
+            System.out.println("No se recibió ningún archivo.");
+            System.out.println("No se recibió el archivo.");
+        }
+
+        File uploadFile = new File(uploadDir, filename);
+
+        // Guardar el archivo
+        try (InputStream inputStream = filePart.getInputStream()) {
+            Files.copy(inputStream, uploadFile.toPath(), StandardCopyOption.REPLACE_EXISTING);
+            System.out.println("Archivo subido exitosamente: " + filename);
+        } catch (IOException e) {
+            e.printStackTrace();
+            System.out.println("Error al guardar el archivo.");
+        }
+    }
 }

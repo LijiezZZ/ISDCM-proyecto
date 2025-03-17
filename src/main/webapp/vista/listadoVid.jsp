@@ -44,7 +44,7 @@
             <div class="container-fluid">
                 <a class="navbar-brand" href="#">Gestor de Videos</a>
                 <div class="d-flex align-items-center">
-                    <span class="text-light me-3">Usuario: <strong><%= usuario%></strong></span>
+                    <span class="text-light me-3">Usuario: <strong><a href="${pageContext.request.contextPath}/vista/perfilUsu.jsp" style="text-decoration: none; color: inherit;"><%= usuario %></a></strong></span>
                     <a href="<%= request.getContextPath() %>/servletUsuarios?action=logout" class="btn btn-danger">Cerrar sesión</a>
                 </div>
             </div>

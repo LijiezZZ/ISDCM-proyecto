@@ -4,6 +4,8 @@
  */
 package modelo;
 
+import java.sql.Timestamp;
+
 /**
  *
  * @author alumne
@@ -16,24 +18,31 @@ public class Usuario {
     private String email;
     private String username;
     private String password;
-    private int indBaja;
+    private Integer indBaja;
+    private Timestamp creacionTimestamp;
+    private Timestamp modificacionTimestamp;
+    private Integer indFallos;
 
-    public Usuario(String nombre, String apellidos, String email, String username, String password, int indBaja) {
+    // Para registrar usuario
+    public Usuario(String nombre, String apellidos, String email, String username, String password) {
         this.nombre = nombre;
         this.apellidos = apellidos;
         this.email = email;
         this.username = username;
         this.password = password;
-        this.indBaja = indBaja;
     }
 
-    public Usuario(Integer id, String nombre, String apellidos, String email, String username, int indBaja) {
+    // Para guardar en una sesión
+    public Usuario(Integer id, String nombre, String apellidos, String email, String username, Integer indBaja, Timestamp creacionTimestamp, Timestamp modificacionTimestamp, Integer indFallos) {
         this.id = id;
         this.nombre = nombre;
         this.apellidos = apellidos;
         this.email = email;
         this.username = username;
         this.indBaja = indBaja;
+        this.creacionTimestamp = creacionTimestamp;
+        this.modificacionTimestamp = modificacionTimestamp;
+        this.indFallos = indFallos;
     }
 
     public Integer getId() {
@@ -60,7 +69,19 @@ public class Usuario {
         return password;
     }
     
-    public int getIndBaja() {
+    public Integer getIndBaja() {
         return indBaja;
+    }
+    
+    public Timestamp getCreacionTimestamp() {
+        return creacionTimestamp;
+    }
+    
+    public Timestamp getModificacionTimestamp() {
+        return modificacionTimestamp;
+    }
+    
+    public Integer getIndFallos() {
+        return indFallos;
     }
 }

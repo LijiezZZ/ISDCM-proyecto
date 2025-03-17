@@ -25,6 +25,7 @@ public class servletUsuarios extends HttpServlet {
     private static final String LOGIN = "login";
     private static final String LOGOUT = "logout";
     private static final String REGISTER = "register";
+    private static final String UPDATE = "update";
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -36,8 +37,7 @@ public class servletUsuarios extends HttpServlet {
             response.sendRedirect("vista/login.jsp");
         }
     }
-    
-    
+
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String action = request.getParameter("action");
@@ -58,6 +58,9 @@ public class servletUsuarios extends HttpServlet {
             case REGISTER:
                 handleRegister(request, response);
                 break;
+            case UPDATE:
+                handleUpdate(request, response);
+                break;
             default:
                 response.sendRedirect("vista/login.jsp");
         }
@@ -69,18 +72,54 @@ public class servletUsuarios extends HttpServlet {
         String password = request.getParameter("password");
 
         UsuarioDAO usuarioDAO = new UsuarioDAO();
-        Usuario user = usuarioDAO.authenticateUser(username, password);
 
-        // Existe el usuario en base de datos
+        // Verificar si el usuario está registrado
+        if (!usuarioDAO.isUsernameRegistered(username)) {
+            redirectToLoginWithError(request, response, "Usuario o contraseña incorrectos.");
+            return;
+        }
+
+        // Autenticación de usuario
+        Usuario user = usuarioDAO.authenticateUser(username, password);
         if (user != null) {
+            // Comprobar si el usuario está bloqueado
+            if (usuarioDAO.isUserBlocked(username)) {
+                redirectToLoginWithError(request, response, "Su cuenta está bloqueada, inténtalo de nuevo más tarde.");
+                return;
+            }
+
+            // Resetear indFallos a 0 al iniciar sesión
+            usuarioDAO.resetIndFallos(username);
+
+            // Crear sesión para el usuario autenticado
             HttpSession session = request.getSession();
             session.setAttribute("user", user);
+
+            // Redirigir a la página principal
             response.sendRedirect(request.getContextPath() + "/servletListadoVid");
-        // Username o contraseña incorrectos
         } else {
-            request.setAttribute("error", "Usuario o contraseña incorrectos.");
-            request.getRequestDispatcher("vista/login.jsp").forward(request, response);
+            // Incrementar fallos e intentar bloquear al usuario si es necesario
+            usuarioDAO.incrementIndFallos(username);
+
+            // Obtener los fallos actuales
+            int fallos = usuarioDAO.getIndFallos(username);
+
+            if (fallos >= 3) {
+                if (!usuarioDAO.isUserBlocked(username)) {
+                    usuarioDAO.blockUser(username);
+                }
+                redirectToLoginWithError(request, response, "El número de intentos ha superado el límite de 3. Por favor, inténtalo nuevamente más tarde.");
+            } else {
+                redirectToLoginWithError(request, response, "Usuario o contraseña incorrectos.");
+            }
         }
+    }
+
+    // Método auxiliar para redirigir con un mensaje de error
+    private void redirectToLoginWithError(HttpServletRequest request, HttpServletResponse response, String errorMessage) throws ServletException, IOException {
+        request.setAttribute("error", errorMessage);
+        request.getRequestDispatcher("vista/login.jsp").forward(request, response);
+        return;
     }
 
     private void handleLogout(HttpServletRequest request, HttpServletResponse response) throws IOException {
@@ -105,7 +144,7 @@ public class servletUsuarios extends HttpServlet {
         }
 
         // Crear el objeto Usuario con los datos del formulario
-        Usuario user = new Usuario(firstName, lastName, email, username, password, 0);
+        Usuario user = new Usuario(firstName, lastName, email, username, password);
         UsuarioDAO usuarioDAO = new UsuarioDAO();
 
         // Comprobar si el email ya está registrado
@@ -121,13 +160,37 @@ public class servletUsuarios extends HttpServlet {
             request.getRequestDispatcher("vista/registroUsu.jsp").forward(request, response);
             return;
         }
-        
+
         //INtentar registrar el usuario en la base de datos
         if (usuarioDAO.registerUser(user)) {
             response.sendRedirect("vista/login.jsp?success=1");
         } else {
             request.setAttribute("error", "No se pudo completar el registro.");
             request.getRequestDispatcher("vista/registroUsu.jsp").forward(request, response);
+            return;
+        }
+
+    }
+
+    private void handleUpdate(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        String username = request.getParameter("username");
+        String oldPassword = request.getParameter("old_password");
+        String newPassword = request.getParameter("password");
+
+        UsuarioDAO usuarioDAO = new UsuarioDAO();
+
+        if (usuarioDAO.authenticateUser(username, oldPassword) != null) {
+            if (usuarioDAO.updateUser(username, newPassword)) {
+                request.getSession().invalidate();
+                response.sendRedirect("vista/login.jsp?success=2");
+            } else {
+                request.setAttribute("error", "No se pudo actualizar la contraseña.");
+                request.getRequestDispatcher("vista/perfilUsu.jsp").forward(request, response);
+                return;
+            }
+        } else {
+            request.setAttribute("error", "La contraseña actual es incorrecta. Inténtalo de nuevo.");
+            request.getRequestDispatcher("vista/perfilUsu.jsp").forward(request, response);
             return;
         }
 

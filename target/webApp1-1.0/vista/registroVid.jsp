@@ -47,15 +47,15 @@
                     <!-- Título (autocompletado) -->
                     <div class="mb-3">
                         <label for="titulo" class="form-label">Título del video</label>
-                        <input type="text" class="form-control" id="titulo" name="titulo" required>
-                        <div class="invalid-feedback">El título es obligatorio.</div>
+                        <input type="text" class="form-control" id="titulo" name="titulo" required pattern="[A-Za-zÁÉÍÓÚáéíóúñÑ0-9.-_ ]{3,50}">
+                        <div class="invalid-feedback">El título es obligatorio y debe tener entre 3 y 50 caracteres y solo puede contener letras, números, espacios, puntos y guiones.</div>
                     </div>
 
                     <!-- Autor -->
                     <div class="mb-3">
                         <label for="autor" class="form-label">Autor</label>
-                        <input type="text" class="form-control" id="autor" name="autor" required>
-                        <div class="invalid-feedback">El autor es obligatorio.</div>
+                        <input type="text" class="form-control" id="autor" name="autor" required pattern="[A-Za-zÁÉÍÓÚáéíóúñÑ0-9.-_ ]{2,50}">
+                        <div class="invalid-feedback">El autor es obligatorio y debe tener entre 2 y 50 caracteres y solo puede contener letras, números, espacios, puntos y guiones.</div>
                     </div>
 
                     <!-- Fecha de Creación (autocompletado) -->
@@ -73,8 +73,8 @@
                     <!-- Descripción -->
                     <div class="mb-3">
                         <label for="descripcion" class="form-label">Descripción</label>
-                        <textarea class="form-control" id="descripcion" name="descripcion" rows="3" required></textarea>
-                        <div class="invalid-feedback">La descripción es obligatoria.</div>
+                        <textarea class="form-control" id="descripcion" name="descripcion" rows="3" pattern="[^<>]{0,500}"></textarea>
+                        <div class="invalid-feedback">La descripción no puede superar los 500 caracteres.</div>
                     </div>
 
                     <!-- Formato (autocompletado) -->
@@ -83,7 +83,7 @@
                         <input type="text" class="form-control" id="formato" name="formato" required readonly>
                     </div>
 
-                    <button type="submit" class="btn btn-success w-100">Registrar video</button>
+                    <button type="submit" class="btn btn-dark w-100">Registrar video</button>
                 </form>
 
                 <div class="text-center mt-3">

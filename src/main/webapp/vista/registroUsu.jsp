@@ -63,7 +63,7 @@
                         <div class="invalid-feedback">Las contraseñas no coinciden.</div>
                     </div>
 
-                    <button type="submit" class="btn btn-success w-100">Registrarse</button>
+                    <button type="submit" class="btn btn-dark w-100">Registrarse</button>
                 </form>
 
                 <div class="text-center mt-3">
@@ -73,7 +73,7 @@
         </div>
 
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-        <script src="../js/validaciones.js"></script>
+        <script src="${pageContext.request.contextPath}/js/validaciones.js"></script>
 
     </body>
 </html>
