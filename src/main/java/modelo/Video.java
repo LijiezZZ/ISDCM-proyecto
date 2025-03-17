@@ -13,49 +13,37 @@ import java.sql.Timestamp;
  * @author alumne
  */
 public class Video {
-    
+
     private Integer id;
     private String titulo;
     private String autor;
     private Date fechaCreacion;
-    private Timestamp creacionTimestamp;
-    private Timestamp modificacionTimestamp;
     private Time duracion;
     private Integer numReproducciones;
     private String descripcion;
     private String formato;
     private String localizacion;
+    private Timestamp creacionTimestamp;
+    private Timestamp modificacionTimestamp;
     private Integer userId;
 
-    public Video(Integer id, String titulo, String autor, Date fechaCreacion, Timestamp creacionTimestamp,Timestamp modificacionTimestamp , Time duracion, Integer numReproducciones, String descripcion, String formato, String localizacion, Integer userId) {
+    // Para listar el video, información completa
+    public Video(Integer id, String titulo, String autor, Date fechaCreacion, Time duracion, Integer numReproducciones, String descripcion, String formato, String localizacion, Timestamp creacionTimestamp, Timestamp modificacionTimestamp, Integer userId) {
         this.id = id;
         this.titulo = titulo;
         this.autor = autor;
         this.fechaCreacion = fechaCreacion;
-        this.creacionTimestamp = creacionTimestamp;
-        this.modificacionTimestamp = modificacionTimestamp;
         this.duracion = duracion;
         this.numReproducciones = numReproducciones;
         this.descripcion = descripcion;
         this.formato = formato;
         this.localizacion = localizacion;
-        this.userId = userId;
-    }
-    
-    public Video(String titulo, String autor, Date fechaCreacion, Timestamp creacionTimestamp,Timestamp modificacionTimestamp, Time duracion, Integer numReproducciones, String descripcion, String formato, String localizacion, Integer userId) {
-        this.titulo = titulo;
-        this.autor = autor;
-        this.fechaCreacion = fechaCreacion;
         this.creacionTimestamp = creacionTimestamp;
         this.modificacionTimestamp = modificacionTimestamp;
-        this.duracion = duracion;
-        this.numReproducciones = numReproducciones;
-        this.descripcion = descripcion;
-        this.formato = formato;
-        this.localizacion = localizacion;
         this.userId = userId;
     }
     
+    // Para registrar video
     public Video(String titulo, String autor, Date fechaCreacion, Time duracion, Integer numReproducciones, String descripcion, String formato, String localizacion, Integer userId) {
         this.titulo = titulo;
         this.autor = autor;
@@ -84,10 +72,6 @@ public class Video {
         return fechaCreacion;
     }
 
-    public Timestamp getCreacionTimestamp() {
-        return creacionTimestamp;
-    }
-
     public Time getDuracion() {
         return duracion;
     }
@@ -108,9 +92,16 @@ public class Video {
         return localizacion;
     }
 
+    public Timestamp getCreacionTimestamp() {
+        return creacionTimestamp;
+    }
+
+    public Timestamp getModificacionTimestamp() {
+        return modificacionTimestamp;
+    }
+
     public Integer getUserId() {
         return userId;
     }
-    
-    
+
 }

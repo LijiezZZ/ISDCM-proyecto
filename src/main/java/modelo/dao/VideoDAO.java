@@ -26,7 +26,7 @@ public class VideoDAO {
     public boolean registerVideo(Video video) {
         boolean isRegistered = false;
 
-        String sql = "INSERT INTO VIDEOS (TITULO, AUTOR, FECHACREACION, CREACIONTIMESTAMP, DURACION, NUMREPRODUCCIONES, DESCRIPCION, FORMATO, LOCALIZACION, USERID, MODIFICACIONTIMESTAMP) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?,?)";
+        String sql = "INSERT INTO VIDEOS (TITULO, AUTOR, FECHACREACION, CREACIONTIMESTAMP, DURACION, NUMREPRODUCCIONES, DESCRIPCION, FORMATO, LOCALIZACION, USERID, MODIFICACIONTIMESTAMP) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
         try (Connection conn = ConexionDB.getConnection(); PreparedStatement stmt = conn.prepareStatement(sql)) {
 
             stmt.setString(1, video.getTitulo());
@@ -56,7 +56,7 @@ public class VideoDAO {
     public boolean isVideoRegistered(String title, Integer userId) {
         boolean exists = false;
 
-        String sql = "SELECT COUNT(*) FROM VIDEOS WHERE titulo = ? AND userId = ?";
+        String sql = "SELECT COUNT(*) FROM VIDEOS WHERE TITULO = ? AND USERID = ?";
 
         try (Connection conn = ConexionDB.getConnection(); PreparedStatement stmt = conn.prepareStatement(sql)) {
 
@@ -75,29 +75,28 @@ public class VideoDAO {
         }
         return exists;
     }
-    
-    
-    public List<Video> getAllVideos() {
-     System.out.println("Obtener Videos ");  // Depuración
 
-    List<Video> videos = new ArrayList<>();
-    String sql = "SELECT * FROM VIDEOS";
+    public List<Video> getAllVideos() {
+        System.out.println("Obtener Videos ");  // Depuración
+
+        List<Video> videos = new ArrayList<>();
+        String sql = "SELECT * FROM VIDEOS";
         try (Connection conn = ConexionDB.getConnection(); PreparedStatement stmt = conn.prepareStatement(sql)) {
             ResultSet rs = stmt.executeQuery();
             while (rs.next()) {
                 Video video = new Video(
-                    rs.getInt("ID"),
-                    rs.getString("TITULO"),
-                    rs.getString("AUTOR"),
-                    rs.getDate("FECHACREACION"),
-                    rs.getTimestamp("CREACIONTIMESTAMP"),
-                    rs.getTimestamp("MODIFICACIONTIMESTAMP"),
-                    rs.getTime("DURACION"),
-                    rs.getInt("NUMREPRODUCCIONES"),
-                    rs.getString("DESCRIPCION"),
-                    rs.getString("FORMATO"),
-                    rs.getString("LOCALIZACION"),
-                    rs.getInt("USERID")
+                        rs.getInt("ID"),
+                        rs.getString("TITULO"),
+                        rs.getString("AUTOR"),
+                        rs.getDate("FECHACREACION"),
+                        rs.getTime("DURACION"),
+                        rs.getInt("NUMREPRODUCCIONES"),
+                        rs.getString("DESCRIPCION"),
+                        rs.getString("FORMATO"),
+                        rs.getString("LOCALIZACION"),
+                        rs.getTimestamp("CREACIONTIMESTAMP"),
+                        rs.getTimestamp("MODIFICACIONTIMESTAMP"),
+                        rs.getInt("USERID")
                 );
                 videos.add(video);
             }
@@ -107,7 +106,7 @@ public class VideoDAO {
 
         return videos;
     }
-    
+
     public boolean deleteVideo(int videoId) {
         boolean isDeleted = false;
         String sql = "DELETE FROM VIDEOS WHERE ID = ?";
