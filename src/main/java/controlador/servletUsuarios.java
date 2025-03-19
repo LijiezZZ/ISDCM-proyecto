@@ -104,18 +104,13 @@ public class servletUsuarios extends HttpServlet {
             // Obtener los fallos actuales
             int fallos = usuarioDAO.getIndFallos(username);
 
-            if (fallos >= 3) {
-                if (!usuarioDAO.isUserBlocked(username)) {
-                    usuarioDAO.blockUser(username);
-                }
-                redirectToLoginWithError(request, response, "El número de intentos ha superado el límite de 3. Por favor, inténtalo nuevamente más tarde.");
-            } else {
-                redirectToLoginWithError(request, response, "Usuario o contraseña incorrectos.");
+            if (fallos >= 3 && !usuarioDAO.isUserBlocked(username)) {
+                usuarioDAO.blockUser(username);
             }
+            redirectToLoginWithError(request, response, "Usuario o contraseña incorrectos.");
         }
     }
-
-    // Método auxiliar para redirigir con un mensaje de error
+        // Método auxiliar para redirigir con un mensaje de error
     private void redirectToLoginWithError(HttpServletRequest request, HttpServletResponse response, String errorMessage) throws ServletException, IOException {
         request.setAttribute("error", errorMessage);
         request.getRequestDispatcher("vista/login.jsp").forward(request, response);
