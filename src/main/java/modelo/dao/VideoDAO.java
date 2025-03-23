@@ -75,6 +75,7 @@ public class VideoDAO {
         }
         return exists;
     }
+    
 
     public List<Video> getAllVideos() {
         System.out.println("Obtener Videos ");  // Depuración
@@ -106,6 +107,61 @@ public class VideoDAO {
 
         return videos;
     }
+    
+    public Video getVideo(int videoId) {
+        System.out.println("Obtener Video ");
+
+        Video video = new Video(); 
+        String sql = "SELECT * FROM VIDEOS WHERE ID = ?";
+        try (Connection conn = ConexionDB.getConnection(); PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setInt(1, videoId);
+            ResultSet rs = stmt.executeQuery();
+            while (rs.next()) {
+                video = new Video(
+                        rs.getInt("ID"),
+                        rs.getString("TITULO"),
+                        rs.getString("AUTOR"),
+                        rs.getDate("FECHACREACION"),
+                        rs.getTime("DURACION"),
+                        rs.getInt("NUMREPRODUCCIONES"),
+                        rs.getString("DESCRIPCION"),
+                        rs.getString("FORMATO"),
+                        rs.getString("LOCALIZACION"),
+                        rs.getTimestamp("CREACIONTIMESTAMP"),
+                        rs.getTimestamp("MODIFICACIONTIMESTAMP"),
+                        rs.getInt("USERID")
+                );
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return video;
+    }
+    
+    public boolean updateVideo(int id, String titulo, String autor, String descripcion) {
+        boolean isUpdated = false;
+
+        String sql = "UPDATE VIDEOS SET TITULO = ?, AUTOR = ?, DESCRIPCION = ?, MODIFICACIONTIMESTAMP = ? WHERE ID = ?";
+        try (Connection conn = ConexionDB.getConnection(); PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            stmt.setString(1, titulo);
+            stmt.setString(2, autor);
+            stmt.setString(3, descripcion);
+            Timestamp currentTimestamp = new Timestamp(System.currentTimeMillis());
+            stmt.setTimestamp(4, currentTimestamp);
+            
+            stmt.setInt(5, id); // Suponiendo que el ID es un int y tienes un getId()
+
+            int rowsUpdated = stmt.executeUpdate();
+            if (rowsUpdated > 0) {
+                isUpdated = true;
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return isUpdated;
+    }
 
     public boolean deleteVideo(int videoId) {
         boolean isDeleted = false;
@@ -123,5 +179,5 @@ public class VideoDAO {
         }
 
         return isDeleted;
-    }
+    } 
 }

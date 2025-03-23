@@ -36,50 +36,45 @@ public class servletListadoVid extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         
+
         // Crear una instancia del VideoDAO
         VideoDAO videoDAO = new VideoDAO();
         
         // Obtener la acción que viene en el request
         String action = request.getParameter("action");
-
-        if ("delete".equals(action)) {
-            // Si la acción es "delete", eliminamos el video
-            String videoIdParam = request.getParameter("id");
-            if (videoIdParam != null) {
-                int videoId = Integer.parseInt(videoIdParam);
-                boolean isDeleted = videoDAO.deleteVideo(videoId);
-
-                // Puedes agregar un mensaje o redirigir a la misma página
-                if (isDeleted) {
-                    request.setAttribute("message", "El video fue eliminado correctamente.");
-                } else {
-                    request.setAttribute("error", "Hubo un problema al eliminar el video.");
+        if(action == null) action = "";
+        switch(action){
+            case "edit":
+                String videoIdParam2 = request.getParameter("id");
+                if (videoIdParam2 != null) {
+//                    int videoId = Integer.parseInt(videoIdParam2);
+                    response.sendRedirect(request.getContextPath() + "/servletEditarVid?id="+ videoIdParam2);
                 }
-            }
+                break;
+            case "delete":
+                // Si la acción es "delete", eliminamos el video
+                String videoIdParam = request.getParameter("id");
+                if (videoIdParam != null) {
+                    int videoId = Integer.parseInt(videoIdParam);
+                    boolean isDeleted = videoDAO.deleteVideo(videoId);
+
+                    // Puedes agregar un mensaje o redirigir a la misma página
+                    if (isDeleted) {
+                        request.setAttribute("message", "El video fue eliminado correctamente.");
+                    } else {
+                        request.setAttribute("error", "Hubo un problema al eliminar el video.");
+                    }
+                }
+            case "get":
+            default:
+                List<Video> videos = videoDAO.getAllVideos();
+                // Pasar los videos al JSP
+                request.setAttribute("videos", videos);
+
+                // Redirigir a la vista/listadoVid.jsp para mostrar los videos
+                request.getRequestDispatcher("vista/listadoVid.jsp").forward(request, response);
+                break;
         }
-
-        // Obtener todos los videos desde la base de datos
-        List<Video> videos = videoDAO.getAllVideos();
-
-        // Pasar los videos al JSP
-        request.setAttribute("videos", videos);
-
-        // Redirigir a la vista/listadoVid.jsp para mostrar los videos
-        request.getRequestDispatcher("vista/listadoVid.jsp").forward(request, response);
-        
-//        response.setContentType("text/html;charset=UTF-8");
-//        try (PrintWriter out = response.getWriter()) {
-//            /* TODO output your page here. You may use following sample code. */
-//            out.println("<!DOCTYPE html>");
-//            out.println("<html>");
-//            out.println("<head>");
-//            out.println("<title>Servlet servletListadoVid</title>");            
-//            out.println("</head>");
-//            out.println("<body>");
-//            out.println("<h1>Servlet servletListadoVid at " + request.getContextPath() + "</h1>");
-//            out.println("</body>");
-//            out.println("</html>");
-//        }
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
