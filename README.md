@@ -7,7 +7,7 @@
 ## Entregas
 
 ### 1. Primera Entrega:
-Se desarrollará una aplicación web que permita la gestión de usuarios y vídeos. Esta aplicación incluirá funcionalidades básicas de creación, edición y eliminación de usuarios y vídeos, con una interfaz amigable y eficiente.
+Se desarrollará una aplicación web que permita la gestión de usuarios y vídeos.
 
 ### 2. Segunda Entrega:
 En esta fase, se integrará la aplicación web con un servicio web basado en REST, lo que permitirá realizar búsquedas de vídeos y gestionar el conteo de reproducciones o "streaming". Además, se implementará la funcionalidad de streaming para permitir a los usuarios ver los vídeos directamente desde la aplicación.
