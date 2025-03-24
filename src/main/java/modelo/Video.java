@@ -10,7 +10,7 @@ import java.sql.Timestamp;
 
 /**
  *
- * @author alumne
+ * @author Kenny Alejandro/Lijie Yin
  */
 public class Video {
 
@@ -27,6 +27,8 @@ public class Video {
     private Timestamp modificacionTimestamp;
     private Integer userId;
 
+    public Video(){
+    }
     // Para listar el video, información completa
     public Video(Integer id, String titulo, String autor, Date fechaCreacion, Time duracion, Integer numReproducciones, String descripcion, String formato, String localizacion, Timestamp creacionTimestamp, Timestamp modificacionTimestamp, Integer userId) {
         this.id = id;
@@ -55,6 +57,14 @@ public class Video {
         this.localizacion = localizacion;
         this.userId = userId;
     }
+    
+    // Para actualizar video
+    public Video(String titulo, String autor, String descripcion) {
+        this.titulo = titulo;
+        this.autor = autor;
+        this.descripcion = descripcion;
+    }
+    
 
     public Integer getId() {
         return id;

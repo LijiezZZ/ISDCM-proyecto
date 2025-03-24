@@ -33,10 +33,10 @@ body {
 }
 
 /* Estilo para la tabla */
-.table {
+/*.
+table {
     margin-top: 20px;
 }
-
 .table thead {
     background-color: #343a40;
     color: white;
@@ -46,4 +46,74 @@ body {
     background-color: #f2f2f2;
 }
 
+*/
 
+
+.custom-table-card {
+    background-color: #212529;
+    border-radius: 16px;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.06);
+}
+/*
+.table thead {
+    background-color: #e5e5ea;
+}*/
+
+.table thead th {
+    font-weight: 600;
+    font-size: 0.9rem;
+    border: none;
+    text-align: center;
+}
+
+.table td {
+    vertical-align: middle;
+    font-size: 0.88rem;
+    border: none;
+    text-align: center;
+}
+
+.table-hover tbody tr:hover {
+    background-color: #e9ecef;
+}
+
+.btn-sm {
+    border-radius: 8px;
+    font-size: 0.75rem;
+    padding: 6px 12px;
+    transition: all 0.2s ease;
+}
+
+.btn-warning {
+    background-color: #ffd60a;
+    color: #1c1c1e;
+    border: none;
+}
+
+.btn-danger {
+    background-color: #ff3b30;
+    border: none;
+    color: #fff;
+}
+
+/* Scrollbar elegante para Webkit (Chrome, Edge, Safari) */
+.table-responsive::-webkit-scrollbar {
+    height: 8px;
+}
+
+.table-responsive::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+.table-responsive::-webkit-scrollbar-thumb {
+    background-color: #6c757d;
+    border-radius: 10px;
+    border: 2px solid transparent;
+    background-clip: content-box;
+}
+
+/* Scrollbar en Firefox */
+.table-responsive {
+    scrollbar-width: thin;
+    scrollbar-color: #6c757d transparent;
+}

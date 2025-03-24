@@ -1,7 +1,7 @@
 <%-- 
     Document   : listadoVid
     Created on : 2 mar 2025, 18:31:20
-    Author     : alumne
+    Author     : Kenny/Lijie
 --%>
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <%@ page session="true" %>
@@ -105,58 +105,63 @@
             </c:if>
              <!-- Botón para agregar nuevo video -->
             <div class=" mb-1 text-end">
-                <a href="vista/registroVid.jsp" class="btn btn-black">
+                <a href="vista/registroVid.jsp" class="btn btn-dark">
                     <i class="fas fa-plus"></i>
                 </a>
             </div>
-             <div class="table-responsive" style="height: calc(100vh - 200px);">
-                <table class="table table-striped table-bordered mt-3">
-                    <thead class="table-dark">
-                        <tr>
-                            <th>Título</th>
-                            <th>Autor</th>
-                            <th>Fecha de creación</th>
-                            <th>Duración</th>
-                            <th>Número de reproducciones</th>
-                            <th>Descripción</th>
-                            <th>Formato</th>
-                            <th>Localización</th>
-                            <th>Acciones</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <c:if test="${empty videos}">
-                            <tr>
-                                <td colspan="9" class="text-center">No hay videos para mostrar.</td>
-                            </tr>
-                        </c:if>
+            <!--<div class="table-responsive" style="height: calc(100vh - 200px);">-->
 
-                        <c:forEach var="video" items="${videos}">
-                            <tr>
-                                <td>${video.titulo}</td>
-                                <td>${video.autor}</td>
-                                <td>${video.fechaCreacion}</td>
-                                <td>${video.duracion}</td>
-                                <td>${video.numReproducciones}</td>
-                                <td>${video.descripcion}</td>
-                                <td>${video.formato}</td>
-                                <td>${video.localizacion}</td>
-                                <td>
-                                    <!-- Icono Editar -->
-                                    <a href="formularioEditarVideo.jsp?id=${video.id}" class="btn btn-warning btn-sm">
-                                        <i class="fas fa-edit"></i> <!-- Icono de lápiz -->
-                                    </a>
+            <div class="custom-table-card p-3">
+              <div class="table-responsive">
+                <table class="table table-hover table-bordered table-dark mb-0">
+                  <thead>
+                    <tr>
+                      <th class="text-center align-middle">TÍTULO</th>
+                      <th class="text-center align-middle">AUTOR</th>
+                      <th class="text-center align-middle">FECHA DE CREACIÓN</th>
+                      <th class="text-center align-middle">DURACIÓN</th>
+                      <th class="text-center align-middle">REPRODUCCCIONES</th>
+                      <th class="text-center align-middle">DESCRIPCIÓN</th>
+                      <th class="text-center align-middle">FORMATO</th>
+                      <th class="text-center align-middle">LOCALIZACIÓN</th>
+                      <th class="text-center align-middle">ACCIONES</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                      <c:if test="${empty videos}">
+                          <tr>
+                              <td colspan="9" class="text-center">No hay videos para mostrar.</td>
+                          </tr>
+                      </c:if>
 
-                                    <!-- Icono Eliminar -->
-                                    <a href="<%= request.getContextPath() %>/servletListadoVid?action=delete&id=${video.id}" class="btn btn-danger btn-sm" onclick="return confirm('¿Estás seguro de que quieres eliminar este video?');">
-                                        <i class="fas fa-trash-alt"></i> <!-- Icono de tacho de basura -->
-                                    </a>
-                                </td>
-                            </tr>
-                        </c:forEach>
-                    </tbody>
+                      <c:forEach var="video" items="${videos}">
+                          <tr>
+                              <td>${video.titulo}</td>
+                              <td>${video.autor}</td>
+                              <td>${video.fechaCreacion}</td>
+                              <td>${video.duracion}</td>
+                              <td>${video.numReproducciones}</td>
+                              <td>${video.descripcion}</td>
+                              <td>${video.formato}</td>
+                              <td>${video.localizacion}</td>
+                              <td>
+                                  <c:if test="${video.userId == user.id}">
+                                      <a href="<%= request.getContextPath() %>/servletListadoVid?action=edit&id=${video.id}" class="btn btn-warning btn-sm">
+                                          <i class="fas fa-edit"></i>
+                                      </a>
+                                      <a href="<%= request.getContextPath() %>/servletListadoVid?action=delete&id=${video.id}" 
+                                         class="btn btn-danger btn-sm" 
+                                         onclick="return confirm('¿Estás seguro de que quieres eliminar este video?');">
+                                          <i class="fas fa-trash-alt"></i>
+                                      </a>
+                                  </c:if>
+                              </td>
+                          </tr>
+                      </c:forEach>
+                  </tbody>
                 </table>
-             </div>
+              </div>
+            </div>
         </div>
 
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>

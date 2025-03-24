@@ -6,7 +6,7 @@ package modelo;
 
 /**
  *
- * @author alumne
+ * @author Kenny Alejandro/Lijie Yin
  */
 import java.sql.Connection;
 import java.sql.DriverManager;
