@@ -8,7 +8,7 @@ import java.sql.Timestamp;
 
 /**
  *
- * @author alumne
+ * @author Kenny Alejandro/Lijie Yin
  */
 public class Usuario {
 

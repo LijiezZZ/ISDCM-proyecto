@@ -1,7 +1,7 @@
 <%-- 
     Document   : datosUsu
     Created on : 17 mar 2025, 17:10:33
-    Author     : alumne
+    Author     : Kenny/Lijie
 --%>
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <%@ page session="true" %>

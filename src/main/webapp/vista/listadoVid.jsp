@@ -1,7 +1,7 @@
 <%-- 
     Document   : listadoVid
     Created on : 2 mar 2025, 18:31:20
-    Author     : alumne
+    Author     : Kenny/Lijie
 --%>
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <%@ page session="true" %>

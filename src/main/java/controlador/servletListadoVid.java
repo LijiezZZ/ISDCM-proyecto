@@ -1,105 +1,122 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Servlet.java to edit this template
- */
 package controlador;
 
 import java.io.IOException;
-import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 import java.util.List;
+import modelo.Usuario;
 import modelo.Video;
 import modelo.dao.VideoDAO;
 
 /**
- *
- * @author alumne
+ * Servlet que maneja el listado de videos, así como las acciones de edición y eliminación.
+ * Permite a los usuarios autenticados ver sus videos y gestionarlos.
+ * 
+ * URL: /servletListadoVid
+ * 
+ * Acciones soportadas:
+ * - action=edit   → Redirige a la edición de un video
+ * - action=delete → Elimina un video (si pertenece al usuario)
+ * - action=get     o sin acción → Lista todos los videos
+ * 
+ * @author Kenny Alejandro/Lijie Yin
  */
-//@WebServlet(name = "servletListadoVid", urlPatterns = {"/servletListadoVid"})
-
 @WebServlet("/servletListadoVid")
 public class servletListadoVid extends HttpServlet {
 
     /**
-     * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
-     * methods.
-     *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
+     * Verifica si el usuario tiene una sesión activa y devuelve su objeto Usuario.
+     * 
+     * @param request Petición HTTP
+     * @param response Respuesta HTTP
+     * @return Usuario autenticado o null si no hay sesión activa
+     * @throws IOException en caso de redirección
+     */
+    private Usuario obtenerUsuario(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        HttpSession session = request.getSession(false);
+        if (session == null || session.getAttribute("user") == null) {
+            response.sendRedirect("vista/login.jsp");
+            return null;
+        }
+        return (Usuario) session.getAttribute("user");
+    }
+
+    /**
+     * Procesa las peticiones GET y POST según la acción: listar, editar o eliminar.
+     * 
+     * @param request Petición HTTP
+     * @param response Respuesta HTTP
+     * @throws ServletException si ocurre un error en el reenvío
+     * @throws IOException si ocurre un error de I/O
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         
+        Usuario user = obtenerUsuario(request, response);
+        if (user == null) return;
 
-        // Crear una instancia del VideoDAO
         VideoDAO videoDAO = new VideoDAO();
-        
-        // Obtener la acción que viene en el request
         String action = request.getParameter("action");
-        if(action == null) action = "";
-        switch(action){
+        if (action == null) action = "";
+
+        switch (action) {
             case "edit":
-                String videoIdParam2 = request.getParameter("id");
-                if (videoIdParam2 != null) {
-//                    int videoId = Integer.parseInt(videoIdParam2);
-                    response.sendRedirect(request.getContextPath() + "/servletEditarVid?id="+ videoIdParam2);
+                String videoIdEdit = request.getParameter("id");
+                if (videoIdEdit != null) {
+                    response.sendRedirect(request.getContextPath() + "/servletEditarVid?id=" + videoIdEdit);
+                    return;
                 }
                 break;
-            case "delete":
-                // Si la acción es "delete", eliminamos el video
-                String videoIdParam = request.getParameter("id");
-                if (videoIdParam != null) {
-                    int videoId = Integer.parseInt(videoIdParam);
-                    boolean isDeleted = videoDAO.deleteVideo(videoId);
 
-                    // Puedes agregar un mensaje o redirigir a la misma página
-                    if (isDeleted) {
-                        request.setAttribute("message", "El video fue eliminado correctamente.");
-                    } else {
-                        request.setAttribute("error", "Hubo un problema al eliminar el video.");
+            case "delete":
+                String videoIdDel = request.getParameter("id");
+                if (videoIdDel != null) {
+                    try {
+                        int videoId = Integer.parseInt(videoIdDel);
+
+                        if (!videoDAO.isVideoOwner(videoId, user.getId())) {
+                            request.setAttribute("error", "No dispone de permisos para eliminar este video.");
+                        } else {
+                            boolean eliminado = videoDAO.deleteVideo(videoId);
+                            if (eliminado) {
+                                request.setAttribute("message", "El video fue eliminado correctamente.");
+                            } else {
+                                request.setAttribute("error", "Hubo un problema al eliminar el video.");
+                            }
+                        }
+                    } catch (NumberFormatException e) {
+                        request.setAttribute("error", "ID de video inválido.");
                     }
                 }
+                break;
+
             case "get":
             default:
-                List<Video> videos = videoDAO.getAllVideos();
-                // Pasar los videos al JSP
-                request.setAttribute("videos", videos);
-
-                // Redirigir a la vista/listadoVid.jsp para mostrar los videos
-                request.getRequestDispatcher("vista/listadoVid.jsp").forward(request, response);
+                // No hace falta hacer nada aquí, solo continuar con la carga
                 break;
         }
+
+        // Obtener y mostrar todos los videos
+        List<Video> videos = videoDAO.getAllVideos();
+        request.setAttribute("videos", videos);
+        request.getRequestDispatcher("vista/listadoVid.jsp").forward(request, response);
     }
 
-    // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**
-     * Handles the HTTP <code>GET</code> method.
-     *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
+     * Maneja las peticiones GET.
      */
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        
         processRequest(request, response);
     }
 
     /**
-     * Handles the HTTP <code>POST</code> method.
-     *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
+     * Maneja las peticiones POST redirigiéndolas a GET.
      */
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
@@ -108,15 +125,12 @@ public class servletListadoVid extends HttpServlet {
     }
 
     /**
-     * Returns a short description of the servlet.
-     *
-     * @return a String containing servlet description
+     * Descripción corta del servlet.
+     * 
+     * @return Descripción textual
      */
-     @Override
+    @Override
     public String getServletInfo() {
-        return "Servlet que maneja el listado de videos";
+        return "Servlet que gestiona el listado, edición y eliminación de videos";
     }
-    
-
-    
 }
