@@ -1,20 +1,54 @@
-# Proyecto de la Asignatura ISDCM
+# Proyecto ISDCM - Plataforma de Gestión y Distribución de Vídeos
 
-**Integrantes:**
-- Lijie Yin
+Este proyecto corresponde al desarrollo de una plataforma web para la gestión y distribución segura de contenido multimedia, en el marco de la asignatura **Internet, Seguridad y Distribución de Contenido Multimedia (ISDCM)**.
+
+La aplicación permite a los usuarios registrarse, gestionar y reproducir vídeos vía streaming, integrando funcionalidades clave como la búsqueda de contenidos, el conteo de visualizaciones y medidas de seguridad web como autenticación y control de acceso.
+
+El sistema se compone de:
+
+- Un frontend en Java, desarrollado con NetBeans, que ofrece la interfaz gráfica al usuario.
+- Un servicio backend RESTful en Java, encargado de la lógica de negocio y acceso a datos.
+
+Durante el desarrollo se aplicarán buenas prácticas de diseño de software distribuido, manejo eficiente de contenido multimedia, e implementación de medidas de seguridad web.
+
+## Integrantes
+
+- Lijie Yin  
 - Kenny Alejandro
+
+## Estructura del Proyecto
+
+```
+/frontend/             → Aplicación web en Java (NetBeans)
+/backend/              → API REST en Java
+/backend/javadoc/      → Documentación generada con Javadoc
+```
 
 ## Entregas
 
-### 1. Primera Entrega:
-Se desarrollará una aplicación web que permita la gestión de usuarios y vídeos.
+### Primera Entrega
 
-### 2. Segunda Entrega:
-En esta fase, se integrará la aplicación web con un servicio web basado en REST, lo que permitirá realizar búsquedas de vídeos y gestionar el conteo de reproducciones o "streaming". Además, se implementará la funcionalidad de streaming para permitir a los usuarios ver los vídeos directamente desde la aplicación.
+- Desarrollo de una aplicación web para la gestión de usuarios y vídeos.
 
-### 3. Tercera Entrega:
-En la última entrega, se aplicarán técnicas de seguridad a las aplicaciones desarrolladas para garantizar su robustez y protección frente a posibles amenazas. Estas medidas incluirán la implementación de autenticación, autorización y otras buenas prácticas de seguridad web.
+### Segunda Entrega
 
-## Documentación
-Se encuentra disponible la documentación técnica generada con Javadoc. Para acceder, dirígete al siguiente enlace:  
-`/javadoc/apidocs/index.html`.
+- Integración con un servicio web RESTful.  
+- Funcionalidad de búsqueda de vídeos.  
+- Gestión del conteo de reproducciones.  
+- Implementación de streaming de vídeo desde la app.
+
+### Tercera Entrega
+
+- Aplicación de técnicas de seguridad web:
+  - Autenticación y autorización.
+  - Buenas prácticas de protección frente a amenazas comunes.
+
+## Documentación Técnica
+
+La documentación generada con Javadoc se encuentra dentro del directorio del backend:
+
+```
+/backend/javadoc/apidocs/index.html
+```
+
+Puedes abrir el archivo `index.html` en tu navegador para explorar la documentación técnica.
