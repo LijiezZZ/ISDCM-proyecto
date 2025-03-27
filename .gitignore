@@ -3,4 +3,6 @@
 /Frontend/target/
 
 ### Backend
+/Backend/target/
 
+.DS_Store
