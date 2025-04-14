@@ -13,16 +13,16 @@ Durante el desarrollo se aplicaron buenas prácticas de diseño de software dist
 
 ## Integrantes
 
-- Lijie Yin  
 - Kenny Alejandro
+- Lijie Yin
 
 ## Estructura del Proyecto
 
 ```
 /frontend/             → Aplicación web en Java (NetBeans)
+/frontend/javadoc/     → Documentación generada con Javadoc
 /backend/              → API REST en Java
 /backend/javadoc/      → Documentación generada con Javadoc
-/frontend/javadoc/     → Documentación generada con Javadoc
 ```
 
 ## Entregas
