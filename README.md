@@ -22,6 +22,7 @@ Durante el desarrollo se aplicaron buenas prácticas de diseño de software dist
 /frontend/             → Aplicación web en Java (NetBeans)
 /backend/              → API REST en Java
 /backend/javadoc/      → Documentación generada con Javadoc
+/frontend/javadoc/     → Documentación generada con Javadoc
 ```
 
 ## Entregas
@@ -44,14 +45,12 @@ Durante el desarrollo se aplicaron buenas prácticas de diseño de software dist
   - Buenas prácticas de protección frente a amenazas comunes.
 
 ## Documentación Técnica
-
+Puedes abrir el archivo `index.html` en tu navegador para explorar la documentación técnica.
 La documentación generada con Javadoc se encuentra dentro del directorio:
-
 ```
 /frontend/javadoc/apidocs/index.html
 /backend/javadoc/apidocs/index.html
 ```
-Puedes abrir el archivo `index.html` en tu navegador para explorar la documentación técnica.
 ---
 ## Estructura de Comunicación y Flujo del Proyecto ISDCM
 
