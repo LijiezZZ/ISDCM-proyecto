@@ -11,16 +11,16 @@ import java.io.IOException;
 import java.util.List;
 
 /**
- * Servlet que maneja el listado de videos, así como las acciones de edición y eliminación.
- * Permite a los usuarios autenticados ver sus videos y gestionarlos.
- * 
+ * Servlet que maneja el listado de videos, así como las acciones de edición y
+ * eliminación. Permite a los usuarios autenticados ver sus videos y
+ * gestionarlos.
+ *
  * URL: /servletListadoVid
- * 
- * Acciones soportadas:
- * - action=edit   → Redirige a la edición de un video
- * - action=delete → Elimina un video (si pertenece al usuario)
- * - action=get     o sin acción → Lista todos los videos
- * 
+ *
+ * Acciones soportadas: - action=edit → Redirige a la edición de un video -
+ * action=delete → Elimina un video (si pertenece al usuario) - action=get o sin
+ * acción → Lista todos los videos
+ *
  * @author Kenny Alejandro/Lijie Yin
  */
 @WebServlet("/servletListadoVid")
@@ -29,8 +29,9 @@ public class servletListadoVid extends HttpServlet {
     private final ServicioVideoREST servicioVideo = new ServicioVideoREST();
 
     /**
-     * Verifica si el usuario tiene una sesión activa y devuelve su objeto Usuario.
-     * 
+     * Verifica si el usuario tiene una sesión activa y devuelve su objeto
+     * Usuario.
+     *
      * @param request Petición HTTP
      * @param response Respuesta HTTP
      * @return Usuario autenticado o null si no hay sesión activa
@@ -46,8 +47,9 @@ public class servletListadoVid extends HttpServlet {
     }
 
     /**
-     * Procesa las peticiones GET y POST según la acción: listar, editar o eliminar.
-     * 
+     * Procesa las peticiones GET y POST según la acción: listar, editar o
+     * eliminar.
+     *
      * @param request Petición HTTP
      * @param response Respuesta HTTP
      * @throws ServletException si ocurre un error en el reenvío
@@ -57,10 +59,21 @@ public class servletListadoVid extends HttpServlet {
             throws ServletException, IOException {
 
         Usuario user = obtenerUsuario(request, response);
-        if (user == null) return;
+        if (user == null) {
+            return;
+        }
 
         String action = request.getParameter("action");
-        if (action == null) action = "";
+        if (action == null) {
+            action = "";
+        }
+
+        String title = request.getParameter("titulo");
+        String author = request.getParameter("autor");
+        String date = request.getParameter("fecha");
+        title = (title != null && !title.trim().isEmpty()) ? title : null;
+        author = (author != null && !author.trim().isEmpty()) ? author : null;
+        date = (date != null && !date.trim().isEmpty()) ? date : null;
 
         switch (action) {
             case "edit":
@@ -100,7 +113,7 @@ public class servletListadoVid extends HttpServlet {
         }
 
         try {
-            List<Video> videos = servicioVideo.obtenerTodos();
+            List<Video> videos = servicioVideo.buscarVideos(title, author, date);
             request.setAttribute("videos", videos);
         } catch (IOException e) {
             request.setAttribute("error", "No se pudieron cargar los videos desde el backend.");
@@ -129,7 +142,7 @@ public class servletListadoVid extends HttpServlet {
 
     /**
      * Descripción corta del servlet.
-     * 
+     *
      * @return Descripción textual
      */
     @Override
