@@ -1,33 +1,27 @@
-package modelo;
+package dto;
 
 /**
- * Modelo de vídeo en el frontend (equivalente a VideoDTO en el backend).
- * Representa los datos que se envían y reciben en formato JSON.
+ * Objeto de transferencia de datos para la entidad Video.
+ * Utilizado para comunicación con el frontend (REST).
+ *
+ *
+ * @author kennyalejandro
  */
-public class Video {
+public class VideoDTO {
     private Integer id;
     private String titulo;
     private String autor;
     private String descripcion;
-    private String fechaCreacion;         // formato: yyyy-MM-dd
-    private String duracion;              // formato: HH:mm:ss
-    private String creacionTimestamp;     // formato: yyyy-MM-dd'T'HH:mm:ss.SSSX
-    private String modificacionTimestamp; // formato: yyyy-MM-dd'T'HH:mm:ss.SSSX
+    private String fechaCreacion;          // formato: "yyyy-MM-dd"
+    private String duracion;               // formato: "HH:mm:ss"
+    private String creacionTimestamp;      // formato: "yyyy-MM-dd'T'HH:mm:ss.SSSX"
+    private String modificacionTimestamp;  // mismo formato
     private String formato;
     private String localizacion;
     private Integer numReproducciones;
     private Integer userId;
 
-    public Video() {}
-    
-    public Video(String titulo, String autor, String descripcion) {
-        this.titulo = titulo;
-        this.autor = autor;
-        this.descripcion = descripcion;
-    }
-    
-    public Integer getId() { return id; }
-    public void setId(Integer id) { this.id = id; }
+    public VideoDTO() {}
 
     public String getTitulo() { return titulo; }
     public void setTitulo(String titulo) { this.titulo = titulo; }
@@ -61,4 +55,7 @@ public class Video {
 
     public Integer getUserId() { return userId; }
     public void setUserId(Integer userId) { this.userId = userId; }
-} 
+    
+    public Integer getId() { return id; }
+    public void setId(Integer id) { this.id = id; }
+}

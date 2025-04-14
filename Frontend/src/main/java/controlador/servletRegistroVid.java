@@ -2,7 +2,7 @@ package controlador;
 
 import modelo.Video;
 import modelo.Usuario;
-import modelo.dao.VideoDAO;
+import servicio.ServicioVideoREST;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -19,8 +19,10 @@ import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import jakarta.servlet.http.Part;
 
-import java.sql.Date;
-import java.sql.Time;
+import java.time.LocalDate;
+import java.time.LocalTime;
+import java.time.OffsetDateTime;
+import java.time.format.DateTimeFormatter;
 
 /**
  * Servlet encargado de procesar el registro de nuevos videos por parte de usuarios autenticados.
@@ -28,7 +30,7 @@ import java.sql.Time;
  * Funcionalidades:
  * - Verifica sesión activa del usuario
  * - Valida duplicados por título y usuario
- * - Guarda el video en la base de datos
+ * - Guarda el video en la base de datos vía API REST
  * - Sube el archivo del video al sistema de archivos
  * 
  * Mapea en: /servletRegistroVid
@@ -59,7 +61,6 @@ public class servletRegistroVid extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
-        // Obtener parámetros del formulario
         String title = request.getParameter("titulo");
         String author = request.getParameter("autor");
         String creationDate = request.getParameter("fechaCreacion");
@@ -67,37 +68,44 @@ public class servletRegistroVid extends HttpServlet {
         String description = request.getParameter("descripcion");
         String format = request.getParameter("formato");
 
-        // Convertir a tipos adecuados
-        Date creationDateDateFormat = Date.valueOf(creationDate);
-        Time durationTimeFormat = Time.valueOf(duration);
-
-        // Definir ruta de guardado del archivo (relativa al sistema)
         String localization = "/videosRegistrados/" + title + "." + format;
 
-        // Verificar sesión activa
         HttpSession session = request.getSession(false);
         if (session == null || session.getAttribute("user") == null) {
             response.sendRedirect("vista/login.jsp");
             return;
         }
 
-        // Obtener usuario de sesión
         Usuario user = (Usuario) session.getAttribute("user");
         Integer userId = user.getId();
 
-        // Crear objeto Video
-        Video video = new Video(title, author, creationDateDateFormat, durationTimeFormat, 0, description, format, localization, userId);
-        VideoDAO videoDAO = new VideoDAO();
+        // Formatear fecha actual como OffsetDateTime (para creacion y modificacion)
+        OffsetDateTime now = OffsetDateTime.now();
+        String nowFormatted = now.format(DateTimeFormatter.ISO_OFFSET_DATE_TIME);
 
-        // Validar duplicado
-        if (videoDAO.isVideoRegistered(title, userId)) {
+        // Construcción del objeto compatible con VideoDTO
+        Video video = new Video();
+        video.setTitulo(title);
+        video.setAutor(author);
+        video.setFechaCreacion(creationDate);
+        video.setDuracion(duration);
+        video.setDescripcion(description);
+        video.setFormato(format);
+        video.setLocalizacion(localization);
+        video.setUserId(userId);
+        video.setNumReproducciones(0);
+        video.setCreacionTimestamp(nowFormatted);
+        video.setModificacionTimestamp(nowFormatted);
+
+        ServicioVideoREST servicio = new ServicioVideoREST();
+
+        if (servicio.existeVideo(title, userId)) {
             request.setAttribute("error", "Este video ya ha sido registrado previamente por usted.");
             request.getRequestDispatcher("vista/registroVid.jsp").forward(request, response);
             return;
         }
 
-        // Registrar video en base de datos y guardar archivo físico
-        if (videoDAO.registerVideo(video)) {
+        if (servicio.registrarVideo(video)) {
             saveVideoFile(request.getPart("videoFile"), title + "." + format);
             response.sendRedirect(request.getContextPath() + "/servletListadoVid");
         } else {

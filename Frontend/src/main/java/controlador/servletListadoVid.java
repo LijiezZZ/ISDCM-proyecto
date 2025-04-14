@@ -1,16 +1,14 @@
 package controlador;
 
-import java.io.IOException;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
-import jakarta.servlet.http.HttpServlet;
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
-import jakarta.servlet.http.HttpSession;
-import java.util.List;
+import jakarta.servlet.http.*;
 import modelo.Usuario;
 import modelo.Video;
-import modelo.dao.VideoDAO;
+import servicio.ServicioVideoREST;
+
+import java.io.IOException;
+import java.util.List;
 
 /**
  * Servlet que maneja el listado de videos, así como las acciones de edición y eliminación.
@@ -27,6 +25,8 @@ import modelo.dao.VideoDAO;
  */
 @WebServlet("/servletListadoVid")
 public class servletListadoVid extends HttpServlet {
+
+    private final ServicioVideoREST servicioVideo = new ServicioVideoREST();
 
     /**
      * Verifica si el usuario tiene una sesión activa y devuelve su objeto Usuario.
@@ -55,11 +55,10 @@ public class servletListadoVid extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        
+
         Usuario user = obtenerUsuario(request, response);
         if (user == null) return;
 
-        VideoDAO videoDAO = new VideoDAO();
         String action = request.getParameter("action");
         if (action == null) action = "";
 
@@ -78,10 +77,10 @@ public class servletListadoVid extends HttpServlet {
                     try {
                         int videoId = Integer.parseInt(videoIdDel);
 
-                        if (!videoDAO.isVideoOwner(videoId, user.getId())) {
+                        if (!servicioVideo.esPropietario(videoId, user.getId())) {
                             request.setAttribute("error", "No dispone de permisos para eliminar este video.");
                         } else {
-                            boolean eliminado = videoDAO.deleteVideo(videoId);
+                            boolean eliminado = servicioVideo.eliminarVideo(videoId);
                             if (eliminado) {
                                 request.setAttribute("message", "El video fue eliminado correctamente.");
                             } else {
@@ -96,13 +95,17 @@ public class servletListadoVid extends HttpServlet {
 
             case "get":
             default:
-                // No hace falta hacer nada aquí, solo continuar con la carga
+                // Sin acción específica, continuar con listado
                 break;
         }
 
-        // Obtener y mostrar todos los videos
-        List<Video> videos = videoDAO.getAllVideos();
-        request.setAttribute("videos", videos);
+        try {
+            List<Video> videos = servicioVideo.obtenerTodos();
+            request.setAttribute("videos", videos);
+        } catch (IOException e) {
+            request.setAttribute("error", "No se pudieron cargar los videos desde el backend.");
+        }
+
         request.getRequestDispatcher("vista/listadoVid.jsp").forward(request, response);
     }
 
