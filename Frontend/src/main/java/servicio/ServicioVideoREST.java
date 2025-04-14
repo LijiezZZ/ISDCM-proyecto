@@ -13,15 +13,15 @@ import java.util.List;
  * Servicio cliente REST que gestiona la comunicación entre el frontend y la API REST de vídeos.
  * Encapsula todas las operaciones relacionadas con vídeos, haciendo uso de peticiones HTTP.
  * 
- * URL base esperada del backend: http://localhost:8080/backend-app/resources/videos
+ * URL base esperada del backend: http://localhost:8180/Backend/resources/videos
  * 
  * Requiere la dependencia Jackson para la conversión JSON <-> Java.
  * 
- * @author 
+ * @author Kenny Alejandro
  */
 public class ServicioVideoREST {
 
-    private static final String API_BASE_URL = "http://localhost:8080/backend-app/resources/videos";
+    private static final String API_BASE_URL = "http://localhost:8180/Backend/resources/videos";
     private final ObjectMapper mapper = new ObjectMapper();
 
     /**
@@ -41,6 +41,9 @@ public class ServicioVideoREST {
 
     /**
      * Realiza una búsqueda de vídeos por título, autor y/o fecha.
+     * 
+     * Ejemplo de uso:
+     * buscarVideos("java", "kenny", "2025-04") → buscará vídeos de Kenny con "java" en el título creados en abril 2025.
      * 
      * @param titulo Título parcial o completo (puede ser null)
      * @param autor  Autor exacto (puede ser null)
@@ -82,6 +85,7 @@ public class ServicioVideoREST {
 
     /**
      * Registra un nuevo vídeo enviando su información a la API REST.
+     * Requiere al menos: título, autor, fechaCreacion, duracion, formato, localizacion y userId.
      * 
      * @param video Objeto Video con los datos a registrar
      * @return true si se creó correctamente, false si no
@@ -155,7 +159,7 @@ public class ServicioVideoREST {
      * 
      * @param videoId ID del vídeo
      * @param userId  ID del usuario
-     * @return true si el usuario es propietario, false si no
+     * @return true si el usuario es propietario, false si no (devuelto como texto "true"/"false")
      * @throws IOException si hay error al verificar
      */
     public boolean esPropietario(int videoId, int userId) throws IOException {
@@ -184,5 +188,3 @@ public class ServicioVideoREST {
         }
     }
 }
-
-

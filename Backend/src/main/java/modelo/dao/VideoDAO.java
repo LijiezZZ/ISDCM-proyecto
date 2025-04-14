@@ -15,6 +15,8 @@ import java.sql.Timestamp;
 import java.sql.Time;
 import java.sql.Date;
 import java.time.LocalDate;
+import java.time.OffsetDateTime;
+import java.time.ZoneOffset;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -53,9 +55,9 @@ public class VideoDAO {
 
             stmt.setString(1, video.getTitulo());
             stmt.setString(2, video.getAutor());
-            stmt.setDate(3, video.getFechaCreacion());
+            stmt.setDate(3, java.sql.Date.valueOf(video.getFechaCreacion()));
             stmt.setTimestamp(4, currentTimestamp);
-            stmt.setTime(5, video.getDuracion());
+            stmt.setTime(5, java.sql.Time.valueOf(video.getDuracion()));
             stmt.setInt(6, video.getNumReproducciones());
             stmt.setString(7, video.getDescripcion());
             stmt.setString(8, video.getFormato());
@@ -130,14 +132,14 @@ public class VideoDAO {
                        rs.getInt("ID"),
                        rs.getString("TITULO"),
                        rs.getString("AUTOR"),
-                       rs.getDate("FECHACREACION"),
-                       rs.getTime("DURACION"),
+                       rs.getDate("FECHACREACION").toLocalDate(),
+                       rs.getTime("DURACION").toLocalTime(),
                        rs.getInt("NUMREPRODUCCIONES"),
                        rs.getString("DESCRIPCION"),
                        rs.getString("FORMATO"),
                        rs.getString("LOCALIZACION"),
-                       rs.getTimestamp("CREACIONTIMESTAMP"),
-                       rs.getTimestamp("MODIFICACIONTIMESTAMP"),
+                       OffsetDateTime.ofInstant(rs.getTimestamp("CREACIONTIMESTAMP").toInstant(), ZoneOffset.UTC),
+                       OffsetDateTime.ofInstant(rs.getTimestamp("MODIFICACIONTIMESTAMP").toInstant(), ZoneOffset.UTC),
                        rs.getInt("USERID")
                );
                videos.add(video);
@@ -238,14 +240,14 @@ public class VideoDAO {
                         rs.getInt("ID"),
                         rs.getString("TITULO"),
                         rs.getString("AUTOR"),
-                        rs.getDate("FECHACREACION"),
-                        rs.getTime("DURACION"),
+                        rs.getDate("FECHACREACION").toLocalDate(),
+                        rs.getTime("DURACION").toLocalTime(),
                         rs.getInt("NUMREPRODUCCIONES"),
                         rs.getString("DESCRIPCION"),
                         rs.getString("FORMATO"),
                         rs.getString("LOCALIZACION"),
-                        rs.getTimestamp("CREACIONTIMESTAMP"),
-                        rs.getTimestamp("MODIFICACIONTIMESTAMP"),
+                        OffsetDateTime.ofInstant(rs.getTimestamp("CREACIONTIMESTAMP").toInstant(), ZoneOffset.UTC),
+                        OffsetDateTime.ofInstant(rs.getTimestamp("MODIFICACIONTIMESTAMP").toInstant(), ZoneOffset.UTC),
                         rs.getInt("USERID")
                 ));
             }
@@ -277,14 +279,14 @@ public class VideoDAO {
                         rs.getInt("ID"),
                         rs.getString("TITULO"),
                         rs.getString("AUTOR"),
-                        rs.getDate("FECHACREACION"),
-                        rs.getTime("DURACION"),
+                        rs.getDate("FECHACREACION").toLocalDate(),
+                        rs.getTime("DURACION").toLocalTime(),
                         rs.getInt("NUMREPRODUCCIONES"),
                         rs.getString("DESCRIPCION"),
                         rs.getString("FORMATO"),
                         rs.getString("LOCALIZACION"),
-                        rs.getTimestamp("CREACIONTIMESTAMP"),
-                        rs.getTimestamp("MODIFICACIONTIMESTAMP"),
+                        OffsetDateTime.ofInstant(rs.getTimestamp("CREACIONTIMESTAMP").toInstant(), ZoneOffset.UTC),
+                        OffsetDateTime.ofInstant(rs.getTimestamp("MODIFICACIONTIMESTAMP").toInstant(), ZoneOffset.UTC),
                         rs.getInt("USERID")
                 );
             }

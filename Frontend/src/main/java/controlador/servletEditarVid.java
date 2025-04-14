@@ -1,7 +1,3 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Servlet.java to edit this template
- */
 package controlador;
 
 import java.io.IOException;
@@ -14,12 +10,12 @@ import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import modelo.Usuario;
 import modelo.Video;
-import modelo.dao.VideoDAO;
+import servicio.ServicioVideoREST;
 
 /**
  * Servlet que permite editar la información de un video existente.
  * Este servlet maneja tanto peticiones GET (para mostrar el formulario)
- * como POST (para actualizar los datos en la base de datos).
+ * como POST (para actualizar los datos en la base de datos vía API REST).
  * 
  * Requiere que el usuario esté autenticado y sea propietario del video.
  * 
@@ -31,15 +27,8 @@ import modelo.dao.VideoDAO;
 @WebServlet("/servletEditarVid")
 public class servletEditarVid extends HttpServlet {
 
-    /**
-     * Verifica si el usuario tiene una sesión activa y devuelve su objeto Usuario.
-     * Si no hay sesión activa, redirige al login.
-     * 
-     * @param request Petición HTTP
-     * @param response Respuesta HTTP
-     * @return Objeto Usuario si hay sesión válida; null si no
-     * @throws IOException si hay un error de redirección
-     */
+    private final ServicioVideoREST servicio = new ServicioVideoREST();
+
     private Usuario obtenerUsuario(HttpServletRequest request, HttpServletResponse response) throws IOException {
         HttpSession session = request.getSession(false);
         if (session == null || session.getAttribute("user") == null) {
@@ -49,30 +38,19 @@ public class servletEditarVid extends HttpServlet {
         return (Usuario) session.getAttribute("user");
     }
 
-    /**
-     * Muestra el formulario de edición con un mensaje de error.
-     * Intenta cargar el video desde la base de datos usando el ID del formulario.
-     * 
-     * @param request Petición HTTP
-     * @param response Respuesta HTTP
-     * @param errorMsg Mensaje de error que se mostrará en el JSP
-     * @throws ServletException si hay un error de reenvío
-     * @throws IOException si hay un error de entrada/salida
-     */
     private void mostrarFormularioConError(HttpServletRequest request, HttpServletResponse response, String errorMsg)
             throws ServletException, IOException {
-        
-        String idParam = request.getParameter("videoId"); // viene del formulario POST
+
+        String idParam = request.getParameter("videoId");
         if (idParam != null) {
             try {
                 int id = Integer.parseInt(idParam);
-                VideoDAO videoDAO = new VideoDAO();
-                Video video = videoDAO.getVideo(id);
+                Video video = servicio.getVideoPorId(id);
                 if (video != null) {
                     request.setAttribute("video", video);
                 }
-            } catch (NumberFormatException e) {
-                // Ignorar error, ya se maneja más arriba
+            } catch (NumberFormatException | IOException e) {
+                // Ignorado, mensaje de error ya proporcionado
             }
         }
 
@@ -80,14 +58,6 @@ public class servletEditarVid extends HttpServlet {
         request.getRequestDispatcher("vista/editarVid.jsp").forward(request, response);
     }
 
-    /**
-     * Maneja la petición GET para mostrar el formulario de edición de video.
-     * 
-     * @param request Petición HTTP
-     * @param response Respuesta HTTP
-     * @throws ServletException si hay un error de reenvío
-     * @throws IOException si hay un error de entrada/salida
-     */
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
@@ -100,8 +70,7 @@ public class servletEditarVid extends HttpServlet {
         if (videoIdParam != null) {
             try {
                 int videoId = Integer.parseInt(videoIdParam);
-                VideoDAO videoDAO = new VideoDAO();
-                Video video = videoDAO.getVideo(videoId);
+                Video video = servicio.getVideoPorId(videoId);
 
                 if (video != null) {
                     request.setAttribute("video", video);
@@ -118,15 +87,6 @@ public class servletEditarVid extends HttpServlet {
         request.getRequestDispatcher("vista/editarVid.jsp").forward(request, response);
     }
 
-    /**
-     * Maneja la petición POST para actualizar los datos de un video.
-     * Verifica si el usuario tiene permiso de editarlo.
-     * 
-     * @param request Petición HTTP con datos del formulario
-     * @param response Respuesta HTTP
-     * @throws ServletException si hay un error de reenvío
-     * @throws IOException si hay un error de entrada/salida
-     */
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
@@ -166,10 +126,10 @@ public class servletEditarVid extends HttpServlet {
             return;
         }
 
-        VideoDAO videoDAO = new VideoDAO();
-        boolean actualizado = videoDAO.updateVideo(idVid, titulo, autor, descripcion);
+        Video actualizado = new Video(titulo, autor, descripcion);
+        boolean ok = servicio.actualizarVideo(idVid, actualizado);
 
-        if (actualizado) {
+        if (ok) {
             response.sendRedirect(request.getContextPath() + "/servletListadoVid");
         } else {
             request.setAttribute("titulo", titulo);
@@ -179,11 +139,6 @@ public class servletEditarVid extends HttpServlet {
         }
     }
 
-    /**
-     * Devuelve una breve descripción del servlet.
-     * 
-     * @return Descripción del servlet
-     */
     @Override
     public String getServletInfo() {
         return "Servlet que maneja la edición de videos";

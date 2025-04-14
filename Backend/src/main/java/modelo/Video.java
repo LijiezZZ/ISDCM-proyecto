@@ -1,40 +1,46 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package modelo;
 
-import jakarta.json.bind.annotation.JsonbProperty;
-import java.sql.Date;
-import java.sql.Time;
-import java.sql.Timestamp;
-
-import jakarta.json.bind.annotation.JsonbTransient;
-
+import jakarta.json.bind.annotation.JsonbDateFormat;
+import java.time.LocalDate;
+import java.time.LocalTime;
+import java.time.OffsetDateTime;
 
 /**
- *
- * @author Kenny Alejandro/Lijie Yin
+ * Modelo de vídeo utilizado en la API REST.
+ * Incluye formato explícito para fechas y horas compatible con JSON-B.
+ * 
+ * @author 
  */
 public class Video {
 
     private Integer id;
     private String titulo;
     private String autor;
-    private Date fechaCreacion;
-    private Time duracion;
+
+    @JsonbDateFormat("yyyy-MM-dd")
+    private LocalDate fechaCreacion;
+
+    @JsonbDateFormat("HH:mm:ss")
+    private LocalTime duracion;
+
     private Integer numReproducciones;
     private String descripcion;
     private String formato;
     private String localizacion;
-    private Timestamp creacionTimestamp;
-    private Timestamp modificacionTimestamp;
+
+    @JsonbDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSX")
+    private OffsetDateTime creacionTimestamp;
+
+    @JsonbDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSX")
+    private OffsetDateTime modificacionTimestamp;
+
     private Integer userId;
 
-    public Video(){
-    }
-    // Para listar el video, información completa
-    public Video(Integer id, String titulo, String autor, Date fechaCreacion, Time duracion, Integer numReproducciones, String descripcion, String formato, String localizacion, Timestamp creacionTimestamp, Timestamp modificacionTimestamp, Integer userId) {
+    public Video() {}
+
+    public Video(Integer id, String titulo, String autor, LocalDate fechaCreacion, LocalTime duracion,
+                 Integer numReproducciones, String descripcion, String formato, String localizacion,
+                 OffsetDateTime creacionTimestamp, OffsetDateTime modificacionTimestamp, Integer userId) {
         this.id = id;
         this.titulo = titulo;
         this.autor = autor;
@@ -48,88 +54,42 @@ public class Video {
         this.modificacionTimestamp = modificacionTimestamp;
         this.userId = userId;
     }
-    
-    // Para registrar video
-    public Video(String titulo, String autor, Date fechaCreacion, Time duracion, Integer numReproducciones, String descripcion, String formato, String localizacion, Integer userId) {
-        this.titulo = titulo;
-        this.autor = autor;
-        this.fechaCreacion = fechaCreacion;
-        this.duracion = duracion;
-        this.numReproducciones = numReproducciones;
-        this.descripcion = descripcion;
-        this.formato = formato;
-        this.localizacion = localizacion;
-        this.userId = userId;
-    }
-    
-    // Para actualizar video
-    public Video(String titulo, String autor, String descripcion) {
-        this.titulo = titulo;
-        this.autor = autor;
-        this.descripcion = descripcion;
-    }
-    
 
-    public Integer getId() {
-        return id;
-    }
+    // Getters y Setters completos
 
-    public String getTitulo() {
-        return titulo;
-    }
+    public Integer getId() { return id; }
+    public void setId(Integer id) { this.id = id; }
 
-    public String getAutor() {
-        return autor;
-    }
+    public String getTitulo() { return titulo; }
+    public void setTitulo(String titulo) { this.titulo = titulo; }
 
-    public Date getFechaCreacion() {
-        return fechaCreacion;
-    }
-    
-    @JsonbTransient
-    public Time getDuracion() {
-        return duracion;
-    }
-    
-    public void setDuracion(Time duracion) {
-    this.duracion = duracion;
-    }
-    
-//    public String getDuracionFormato() {
-//    return duracion != null ? duracion.toString() : null;
-//    }
-    
-    @JsonbProperty("duracion")
-    public String getDuracionComoString() {
-        return duracion != null ? duracion.toString() : null;
-    }
+    public String getAutor() { return autor; }
+    public void setAutor(String autor) { this.autor = autor; }
 
-    public Integer getNumReproducciones() {
-        return numReproducciones;
-    }
+    public LocalDate getFechaCreacion() { return fechaCreacion; }
+    public void setFechaCreacion(LocalDate fechaCreacion) { this.fechaCreacion = fechaCreacion; }
 
-    public String getDescripcion() {
-        return descripcion;
-    }
+    public LocalTime getDuracion() { return duracion; }
+    public void setDuracion(LocalTime duracion) { this.duracion = duracion; }
 
-    public String getFormato() {
-        return formato;
-    }
+    public Integer getNumReproducciones() { return numReproducciones; }
+    public void setNumReproducciones(Integer numReproducciones) { this.numReproducciones = numReproducciones; }
 
-    public String getLocalizacion() {
-        return localizacion;
-    }
+    public String getDescripcion() { return descripcion; }
+    public void setDescripcion(String descripcion) { this.descripcion = descripcion; }
 
-    public Timestamp getCreacionTimestamp() {
-        return creacionTimestamp;
-    }
+    public String getFormato() { return formato; }
+    public void setFormato(String formato) { this.formato = formato; }
 
-    public Timestamp getModificacionTimestamp() {
-        return modificacionTimestamp;
-    }
+    public String getLocalizacion() { return localizacion; }
+    public void setLocalizacion(String localizacion) { this.localizacion = localizacion; }
 
-    public Integer getUserId() {
-        return userId;
-    }
+    public OffsetDateTime getCreacionTimestamp() { return creacionTimestamp; }
+    public void setCreacionTimestamp(OffsetDateTime creacionTimestamp) { this.creacionTimestamp = creacionTimestamp; }
 
+    public OffsetDateTime getModificacionTimestamp() { return modificacionTimestamp; }
+    public void setModificacionTimestamp(OffsetDateTime modificacionTimestamp) { this.modificacionTimestamp = modificacionTimestamp; }
+
+    public Integer getUserId() { return userId; }
+    public void setUserId(Integer userId) { this.userId = userId; }
 }
