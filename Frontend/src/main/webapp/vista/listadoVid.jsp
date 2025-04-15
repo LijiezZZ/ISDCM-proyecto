@@ -171,6 +171,9 @@
                                     <td>${video.formato}</td>
                                     <td>${video.localizacion}</td>
                                     <td>
+                                        <a href="${pageContext.request.contextPath}/servletReproduccionVid?id=${video.id}" class="btn btn-success btn-sm">
+                                            <i class="fas fa-play"></i>
+                                        </a>
                                         <c:if test="${video.userId == user.id}">
                                             <a href="<%= request.getContextPath() %>/servletListadoVid?action=edit&id=${video.id}" class="btn btn-warning btn-sm">
                                                 <i class="fas fa-edit"></i>
@@ -192,12 +195,13 @@
 
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
         <script>
-            // Inicializar todos los tooltips
-            document.addEventListener('DOMContentLoaded', function() {
-                var tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]');
-                var tooltipList = [...tooltipTriggerList].map(function (tooltipTriggerEl) {
-                    return new bootstrap.Tooltip(tooltipTriggerEl)});
-            });
+                                                   // Inicializar todos los tooltips
+                                                   document.addEventListener('DOMContentLoaded', function () {
+                                                       var tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]');
+                                                       var tooltipList = [...tooltipTriggerList].map(function (tooltipTriggerEl) {
+                                                           return new bootstrap.Tooltip(tooltipTriggerEl)
+                                                       });
+                                                   });
         </script>
     </body>
 </html>

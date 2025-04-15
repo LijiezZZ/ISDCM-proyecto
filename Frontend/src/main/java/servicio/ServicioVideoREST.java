@@ -7,6 +7,8 @@ import modelo.Video;
 import java.io.*;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import java.util.List;
 
 /**
@@ -180,6 +182,7 @@ public class ServicioVideoREST {
      * @throws IOException si ocurre un error durante la consulta
      */
     public boolean existeVideo(String titulo, int userId) throws IOException {
+        titulo = URLEncoder.encode(titulo, StandardCharsets.UTF_8.toString());
         HttpURLConnection conn = (HttpURLConnection) new URL(API_BASE_URL + "/existe?titulo=" + titulo + "&userId=" + userId).openConnection();
         conn.setRequestMethod("GET");
 

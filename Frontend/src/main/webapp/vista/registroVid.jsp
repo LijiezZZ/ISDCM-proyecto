@@ -6,6 +6,7 @@
 
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <%@ page session="true" %>
+<%@ page import="modelo.Usuario" %>
 <%@ page import="jakarta.servlet.http.HttpSession" %>
 <%
     HttpSession sessionUser = request.getSession(false);
@@ -13,6 +14,9 @@
         response.sendRedirect("login.jsp");
         return;
     }
+    String usuario = null;
+    Usuario user = (Usuario) sessionUser.getAttribute("user");
+    usuario = user.getUsername();
 %>
 <!DOCTYPE html>
 <html lang="es">
@@ -24,6 +28,16 @@
         <link rel="stylesheet" href="${pageContext.request.contextPath}/css/styles.css">
     </head>
     <body>
+        <!-- Barra de navegación -->
+        <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+            <div class="container-fluid">
+                <a class="navbar-brand" href="#">Registrar video</a>
+                <div class="d-flex align-items-center">
+                    <span class="text-light me-3">Usuario: <strong><a href="${pageContext.request.contextPath}/vista/perfilUsu.jsp" style="text-decoration: none; color: inherit;"><%= usuario %></a></strong></span>
+                    <a href="<%= request.getContextPath() %>/servletUsuarios?action=logout" class="btn btn-danger">Cerrar sesión</a>
+                </div>
+            </div>
+        </nav>
 
         <div class="container mt-4">
             <div class="register-container">

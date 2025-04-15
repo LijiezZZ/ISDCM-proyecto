@@ -114,12 +114,21 @@ public class servletListadoVid extends HttpServlet {
 
         try {
             List<Video> videos = servicioVideo.buscarVideos(title, author, date);
-            request.setAttribute("videos", videos);
+
+            if (videos != null && !videos.isEmpty()) {
+                request.setAttribute("videos", videos);
+            } else {
+                request.setAttribute("warning", "No se encontraron videos que coincidan con los filtros.");
+            }
+
         } catch (IOException e) {
-            request.setAttribute("error", "No se pudieron cargar los videos desde el backend.");
+            request.setAttribute("error", "Ocurrió un error al cargar los videos desde el backend.");
+            e.printStackTrace(); // Opcional: útil si estás depurando
         }
 
+// Mostrar la vista del listado
         request.getRequestDispatcher("vista/listadoVid.jsp").forward(request, response);
+
     }
 
     /**
