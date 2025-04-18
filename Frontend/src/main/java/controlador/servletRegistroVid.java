@@ -123,7 +123,7 @@ public class servletRegistroVid extends HttpServlet {
      * @throws IOException      si hay un error de escritura/lectura de archivos
      */
     private void saveVideoFile(Part filePart, String filename) throws ServletException, IOException {
-        String uploadsDir = "/home/alumne/NetBeansProjects/ISDCM-proyecto/videosRegistrados";
+        String uploadsDir = "/home/alumne/NetBeansProjects/ISDCM-proyecto/Frontend/src/main/webapp/videosRegistrados";
         System.out.println("Ruta de los archivos: " + uploadsDir);
         File uploadDir = new File(uploadsDir);
 
