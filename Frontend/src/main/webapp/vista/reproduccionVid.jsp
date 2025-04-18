@@ -41,6 +41,8 @@
             .card {
                 background-color: #1e1e1e;
                 border: none;
+                max-width: 800px;
+                margin: 0 auto;
             }
             .video-container {
                 max-width: 800px;
@@ -49,6 +51,11 @@
             .video-js {
                 border-radius: 12px;
             }
+            .btn-danger {
+                background-color: #ff3b30;
+                border: none;
+                color: #fff;
+            }
         </style>
     </head>
     <body>
@@ -56,7 +63,7 @@
         <!-- Barra de navegación -->
         <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
             <div class="container-fluid">
-                <a class="navbar-brand" href="#">Reproductor de video</a>
+                <a class="navbar-brand" href="#">Reproductor de Video</a>
                 <div class="d-flex align-items-center">
                     <span class="text-light me-3">Usuario: <strong><a href="${pageContext.request.contextPath}/vista/perfilUsu.jsp" style="text-decoration: none; color: inherit;"><%= usuario %></a></strong></span>
                     <a href="<%= request.getContextPath() %>/servletUsuarios?action=logout" class="btn btn-danger">Cerrar sesión</a>
@@ -67,7 +74,7 @@
         <!-- Contenido principal -->
         <div class="container py-5">
             <div class="video-container mb-4">
-                <video id="video-player" class="video-js vjs-default-skin" controls preload="auto" width="100%" height="auto" data-setup="{}">
+                <video id="video-player" class="video-js" autoplay controls preload="auto" width="100%" height="auto" data-setup="{}">
                     <source src="<%= request.getContextPath() + video.getLocalizacion() %>" type="video/mp4">
                     Tu navegador no soporta la reproducción de video.
                 </video>
