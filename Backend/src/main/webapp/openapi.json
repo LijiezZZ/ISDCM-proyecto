@@ -1,0 +1,385 @@
+{
+  "openapi": "3.0.3",
+  "info": {
+    "title": "ISDCM Video API",
+    "version": "1.0",
+    "description": "API RESTful para la gesti\u00f3n de v\u00eddeos en la plataforma ISDCM."
+  },
+  "tags": [
+    {
+      "name": "Videos",
+      "description": "Operaciones relacionadas con la gesti\u00f3n de v\u00eddeos"
+    }
+  ],
+  "servers": [
+  {
+    "url": "/Backend/resources",
+    "description": "API base path"
+  }
+    ],
+
+  "paths": {
+    "/videos": {
+      "get": {
+        "summary": "Listar todos los v\u00eddeos",
+        "tags": [
+          "Videos"
+        ],
+        "parameters": [
+          {
+            "name": "top",
+            "in": "query",
+            "description": "N\u00famero m\u00e1ximo de resultados a devolver",
+            "required": false,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Lista de v\u00eddeos",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/VideoDTO"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "summary": "Registrar un nuevo v\u00eddeo",
+        "tags": [
+          "Videos"
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/VideoDTO"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "V\u00eddeo creado"
+          },
+          "500": {
+            "description": "Error al registrar el v\u00eddeo"
+          }
+        }
+      }
+    },
+    "/videos/buscar": {
+      "get": {
+        "summary": "Buscar v\u00eddeos con filtros",
+        "tags": [
+          "Videos"
+        ],
+        "parameters": [
+          {
+            "name": "titulo",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "autor",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "fecha",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "top",
+            "in": "query",
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "orden",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "enum": [
+                "fecha",
+                "vistas"
+              ]
+            }
+          },
+          {
+            "name": "dir",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "enum": [
+                "asc",
+                "desc"
+              ]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Resultados de la b\u00fasqueda",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/VideoDTO"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/videos/{id}": {
+      "get": {
+        "summary": "Obtener v\u00eddeo por ID",
+        "tags": [
+          "Videos"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "V\u00eddeo encontrado",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/VideoDTO"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "V\u00eddeo no encontrado"
+          }
+        }
+      },
+      "put": {
+        "summary": "Actualizar v\u00eddeo por ID",
+        "tags": [
+          "Videos"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/VideoDTO"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "V\u00eddeo actualizado"
+          },
+          "404": {
+            "description": "V\u00eddeo no encontrado"
+          }
+        }
+      },
+      "delete": {
+        "summary": "Eliminar v\u00eddeo por ID",
+        "tags": [
+          "Videos"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "V\u00eddeo eliminado"
+          },
+          "404": {
+            "description": "V\u00eddeo no encontrado"
+          }
+        }
+      }
+    },
+    "/videos/visualizar/{id}": {
+      "post": {
+        "summary": "Incrementar contador de visualizaci\u00f3n",
+        "tags": [
+          "Videos"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Reproducci\u00f3n contada"
+          }
+        }
+      }
+    },
+    "/videos/{id}/propietario": {
+      "get": {
+        "summary": "Verificar si un usuario es propietario del v\u00eddeo",
+        "tags": [
+          "Videos"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "userId",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Resultado de la verificaci\u00f3n",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "boolean"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/videos/existe": {
+      "get": {
+        "summary": "Verificar si un v\u00eddeo ya fue registrado por un usuario",
+        "tags": [
+          "Videos"
+        ],
+        "parameters": [
+          {
+            "name": "titulo",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "userId",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Boolean indicando existencia",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "boolean"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "VideoDTO": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer"
+          },
+          "titulo": {
+            "type": "string"
+          },
+          "autor": {
+            "type": "string"
+          },
+          "descripcion": {
+            "type": "string"
+          },
+          "duracion": {
+            "type": "string"
+          },
+          "formato": {
+            "type": "string"
+          },
+          "fechaCreacion": {
+            "type": "string"
+          },
+          "localizacion": {
+            "type": "string"
+          },
+          "userId": {
+            "type": "integer"
+          },
+          "numReproducciones": {
+            "type": "integer"
+          }
+        }
+      }
+    }
+  }
+}

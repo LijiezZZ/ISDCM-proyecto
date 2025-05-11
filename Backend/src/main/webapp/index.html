@@ -1,27 +1,22 @@
-<!DOCTYPE html>
-<html>
-    <head>
-        <title>Fichero para pruebas REST</title>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    </head>
-    <body>  
-        
-        <form action="resources/jakartaee9/getInfo" method="get">
-            <label>Informaci&oacute;n</label>
-            <input type="text" name="info"/>
-            <label>Fecha</label>
-            <input type="text" name="fecha"/>
-            <input type="submit" name="submit" value="Enviar con GET"/>
-        </form>        
-        
-        <form action="resources/jakartaee9/postInfo" method="post">
-            <label>Informaci&oacute;n</label>             
-            <input type="text" name="info"/>
-            <label>Fecha</label>
-            <input type="text" name="fecha"/>
-            <input type="submit" name="submit" value="Enviar con POST"/>
-        </form>
-    </body>    
-</html>
 
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>ISDCM Video API - Swagger UI</title>
+  <link rel="stylesheet" type="text/css" href="https://unpkg.com/swagger-ui-dist/swagger-ui.css" />
+</head>
+<body>
+  <div id="swagger-ui"></div>
+
+  <script src="https://unpkg.com/swagger-ui-dist/swagger-ui-bundle.js"></script>
+  <script>
+    const ui = SwaggerUIBundle({
+      url: "openapi.json",
+      dom_id: "#swagger-ui",
+      presets: [SwaggerUIBundle.presets.apis],
+      layout: "BaseLayout"
+    });
+  </script>
+</body>
+</html>
