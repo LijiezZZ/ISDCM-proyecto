@@ -75,7 +75,9 @@
         <div class="container py-5">
             <div class="video-container mb-4">
                 <video id="video-player" class="video-js" autoplay controls preload="auto" width="100%" height="auto" data-setup="{}">
-                    <source src="<%= request.getContextPath() + video.getLocalizacion() %>" type="video/mp4">
+                    <!--<source src="<%= request.getContextPath() + video.getLocalizacion() %>" type="video/mp4">-->
+                    <source src="<%= request.getContextPath() %>/servletVid?localizacion=<%= video.getLocalizacion() %>" type="video/mp4">
+
                     Tu navegador no soporta la reproducción de video.
                 </video>
             </div>
@@ -89,7 +91,7 @@
                     <p class="card-text"><strong>Reproducciones:</strong> <%= video.getNumReproducciones() %></p>
                     <p class="card-text"><strong>Descripción:</strong> <%= video.getDescripcion() %></p>
                     <p class="card-text"><strong>Formato:</strong> <%= video.getFormato() %></p>
-                    <a href="<%= request.getContextPath() %>/servletListadoVid" class="btn btn-outline-light mt-3">Volver al listado</a>
+                    <a href="<%= request.getContextPath() %>/servletListadoVid?titulo=${tituloBuscado != null ? tituloBuscado : ''}&autor=${autorBuscado != null ? autorBuscado : ''}&fecha=${fechaBuscada != null ? fechaBuscada : ''}" class="btn btn-outline-light mt-3">Volver al listado</a>
                 </div>
             </div>
         </div>

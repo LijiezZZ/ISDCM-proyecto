@@ -109,13 +109,13 @@
                 <div class="col-lg-10 col-md-9 col-sm-12">
                     <form class="row gx-2 gy-2 align-items-center" method="get" action="${pageContext.request.contextPath}/servletListadoVid">
                         <div class="col-auto">
-                            <input type="text" name="titulo" class="form-control form-control-sm" placeholder="Título" style="width: 150px;">
+                            <input type="text" name="titulo" class="form-control form-control-sm" placeholder="Título" style="width: 150px;" value="${tituloBuscado != null ? tituloBuscado : ''}">
                         </div>
                         <div class="col-auto">
-                            <input type="text" name="autor" class="form-control form-control-sm" placeholder="Autor" style="width: 150px;">
+                            <input type="text" name="autor" class="form-control form-control-sm" placeholder="Autor" style="width: 150px;" value="${autorBuscado != null ? autorBuscado : ''}">
                         </div>
                         <div class="col-auto">
-                            <input type="text" name="fecha" class="form-control form-control-sm" placeholder="Fecha" style="width: 170px;"
+                            <input type="text" name="fecha" class="form-control form-control-sm" placeholder="Fecha" style="width: 170px;" value="${fechaBuscada != null ? fechaBuscada : ''}"
                                    data-bs-toggle="tooltip" data-bs-placement="top" title="La fecha puede ser YYYY-MM-DD, YYYY-MM o solo YYYY">
                         </div>
 
@@ -130,7 +130,8 @@
 
                 <!-- Botón agregar video -->
                 <div class="col-lg-2 col-md-3 col-sm-12 text-end mt-2 mt-md-0">
-                    <a href="vista/registroVid.jsp" class="btn btn-dark">
+                    
+                    <a href="${pageContext.request.contextPath}/servletRegistroVid?titulo=${param.titulo}&autor=${param.autor}&fecha=${param.fecha}" class="btn btn-dark">
                         <i class="fas fa-plus"></i>
                     </a>
                 </div>
@@ -171,14 +172,15 @@
                                     <td>${video.formato}</td>
                                     <td>${video.localizacion}</td>
                                     <td>
-                                        <a href="${pageContext.request.contextPath}/servletReproduccionVid?id=${video.id}" class="btn btn-success btn-sm">
+                                        <a href="${pageContext.request.contextPath}/servletReproduccionVid?id=${video.id}&titulo=${param.titulo}&autor=${param.autor}&fecha=${param.fecha}" class="btn btn-success btn-sm">
                                             <i class="fas fa-play"></i>
                                         </a>
                                         <c:if test="${video.userId == user.id}">
-                                            <a href="<%= request.getContextPath() %>/servletListadoVid?action=edit&id=${video.id}" class="btn btn-warning btn-sm">
+                                            <a href="<%= request.getContextPath() %>/servletListadoVid?action=edit&id=${video.id}&titulo=${param.titulo}&autor=${param.autor}&fecha=${param.fecha}" class="btn btn-warning btn-sm">
+
                                                 <i class="fas fa-edit"></i>
                                             </a>
-                                            <a href="<%= request.getContextPath() %>/servletListadoVid?action=delete&id=${video.id}" 
+                                            <a href="<%= request.getContextPath() %>/servletListadoVid?action=delete&id=${video.id}&titulo=${param.titulo}&autor=${param.autor}&fecha=${param.fecha}" 
                                                class="btn btn-danger btn-sm" 
                                                onclick="return confirm('¿Estás seguro de que quieres eliminar este video?');">
                                                 <i class="fas fa-trash-alt"></i>

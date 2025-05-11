@@ -59,19 +59,19 @@
 
                     <!-- Título -->
                     <div class="mb-3">
-                        <label for="titulo" class="form-label">Título del video</label>
-                        <input type="text" class="form-control" id="titulo" name="titulo"
+                        <label for="nuevoTitulo" class="form-label">Título del video</label>
+                        <input type="text" class="form-control" id="nuevoTitulo" name="nuevoTitulo"
                                required pattern="[A-Za-zÁÉÍÓÚáéíóúñÑ0-9 .\\-_]{3,50}"
-                               value="${not empty param.titulo ? param.titulo : (not empty titulo ? titulo : video.titulo)}">
+                               value="${not empty nuevoTitulo ? nuevoTitulo : video.titulo}">
                         <div class="invalid-feedback">El título es obligatorio y debe tener entre 3 y 50 caracteres.</div>
                     </div>
 
                     <!-- Autor -->
                     <div class="mb-3">
-                        <label for="autor" class="form-label">Autor</label>
-                        <input type="text" class="form-control" id="autor" name="autor"
+                        <label for="nuevoAutor" class="form-label">Autor</label>
+                        <input type="text" class="form-control" id="nuevoAutor" name="nuevoAutor"
                                required pattern="[A-Za-zÁÉÍÓÚáéíóúñÑ0-9 .\\-_]{2,50}"
-                               value="${not empty param.autor ? param.autor : (not empty autor ? autor : video.autor)}">
+                               value="${not empty nuevoAutor ? nuevoAutor : video.autor}">
                         <div class="invalid-feedback">El autor es obligatorio y debe tener entre 2 y 50 caracteres.</div>
                     </div>
 
@@ -91,9 +91,9 @@
 
                     <!-- Descripción -->
                     <div class="mb-3">
-                        <label for="descripcion" class="form-label">Descripción</label>
-                        <textarea class="form-control" id="descripcion" name="descripcion" rows="3"
-                                  pattern="[^<>]{0,500}">${not empty param.descripcion ? param.descripcion : (not empty descripcion ? descripcion : video.descripcion)}</textarea>
+                        <label for="nuevaDescripcion" class="form-label">Descripción</label>
+                        <textarea class="form-control" id="nuevaDescripcion" name="nuevaDescripcion" rows="3"
+                                  pattern="[^<>]{0,500}">${not empty nuevaDescripcion ? nuevaDescripcion : video.descripcion}</textarea>
                         <div class="invalid-feedback">La descripción no puede superar los 500 caracteres.</div>
                     </div>
 
@@ -110,11 +110,15 @@
 
                     <!-- Botón de envío -->
                     <button type="submit" class="btn btn-dark w-100">Actualizar video</button>
+                    
+                    <input type="hidden" name="tituloBuscado" value="${tituloBuscado}" />
+                    <input type="hidden" name="autorBuscado" value="${autorBuscado}" />
+                    <input type="hidden" name="fechaBuscada" value="${fechaBuscada}" />
                 </form>
 
                 <!-- Volver al listado -->
                 <div class="text-center mt-3">
-                    <a href="${pageContext.request.contextPath}/servletListadoVid" class="btn btn-secondary w-100">Volver al listado</a>
+                    <a href="${pageContext.request.contextPath}/servletListadoVid?titulo=${tituloBuscado != null ? tituloBuscado : ''}&autor=${autorBuscado != null ? autorBuscado : ''}&fecha=${fechaBuscada != null ? fechaBuscada : ''}" class="btn btn-secondary w-100">Volver al listado</a>
                 </div>
             </div>
         </div>

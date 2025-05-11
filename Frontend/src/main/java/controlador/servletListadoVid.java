@@ -75,11 +75,17 @@ public class servletListadoVid extends HttpServlet {
         author = (author != null && !author.trim().isEmpty()) ? author : null;
         date = (date != null && !date.trim().isEmpty()) ? date : null;
 
+        String queryParams = String.format("&titulo=%s&autor=%s&fecha=%s",
+        title != null ? title : "",
+        author != null ? author : "",
+        date != null ? date : "");
+
+        
         switch (action) {
             case "edit":
                 String videoIdEdit = request.getParameter("id");
                 if (videoIdEdit != null) {
-                    response.sendRedirect(request.getContextPath() + "/servletEditarVid?id=" + videoIdEdit);
+                    response.sendRedirect(request.getContextPath() + "/servletEditarVid?id=" + videoIdEdit + queryParams);
                     return;
                 }
                 break;
@@ -114,7 +120,9 @@ public class servletListadoVid extends HttpServlet {
 
         try {
             List<Video> videos = servicioVideo.buscarVideos(title, author, date);
-
+            request.setAttribute("tituloBuscado", title);
+            request.setAttribute("autorBuscado", author);
+            request.setAttribute("fechaBuscada", date);
             if (videos != null && !videos.isEmpty()) {
                 request.setAttribute("videos", videos);
             } else {

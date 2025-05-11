@@ -98,10 +98,15 @@
                     </div>
 
                     <button type="submit" class="btn btn-dark w-100">Registrar video</button>
+                    
+                    <input type="hidden" name="tituloBuscado" value="${tituloBuscado}" />
+                    <input type="hidden" name="autorBuscado" value="${autorBuscado}" />
+                    <input type="hidden" name="fechaBuscada" value="${fechaBuscada}" />
+                    
                 </form>
 
                 <div class="text-center mt-3">
-                    <a href="${pageContext.request.contextPath}/servletListadoVid" class="btn btn-secondary w-100">Volver al listado</a>
+                    <a href="${pageContext.request.contextPath}/servletListadoVid?titulo=${tituloBuscado != null ? tituloBuscado : ''}&autor=${autorBuscado != null ? autorBuscado : ''}&fecha=${fechaBuscada != null ? fechaBuscada : ''}" class="btn btn-secondary w-100">Volver al listado</a>
                 </div>
             </div>
         </div>
