@@ -60,6 +60,9 @@ public class servletReproduccionVid extends HttpServlet {
         if (action == null) {
             action = "";
         }
+        request.setAttribute("tituloBuscado", request.getParameter("titulo"));
+        request.setAttribute("autorBuscado", request.getParameter("autor"));
+        request.setAttribute("fechaBuscada", request.getParameter("fecha"));
 
         String videoIdPlay = request.getParameter("id");
         int videoId = Integer.parseInt(videoIdPlay);
