@@ -156,7 +156,7 @@ public class VideoDAO {
      * compatible con bases de datos Java DB / Derby.
      *
      * @param titulo     Filtro por coincidencia parcial del título (opcional)
-     * @param autor      Filtro por autor exacto (opcional)
+     * @param autor      Filtro por coincidencia parcial del autor (opcional)
      * @param fecha      Fecha exacta o parcial (yyyy, yyyy-MM o yyyy-MM-dd)
      * @param limite     Número máximo de resultados (1-1000). Default: 100
      * @param ordenPor   Campo de orden: "fecha" o "vistas". Default: "fecha"
@@ -173,7 +173,7 @@ public class VideoDAO {
 
         // Filtros
         if (titulo != null) condiciones.add("LOWER(TITULO) LIKE ?");
-        if (autor != null) condiciones.add("LOWER(AUTOR) = ?");
+        if (autor != null) condiciones.add("LOWER(AUTOR) LIKE ?");
         if (fecha != null) {
             try {
                 int length = fecha.length();
@@ -227,7 +227,7 @@ public class VideoDAO {
 
             int i = 1;
             if (titulo != null) stmt.setString(i++, "%" + titulo.toLowerCase() + "%");
-            if (autor != null) stmt.setString(i++, autor.toLowerCase());
+            if (autor != null) stmt.setString(i++, "%" + autor.toLowerCase() + "%");
             if (fechaInicio != null && fechaFin != null) {
                 stmt.setDate(i++, Date.valueOf(fechaInicio));
                 stmt.setDate(i++, Date.valueOf(fechaFin));
