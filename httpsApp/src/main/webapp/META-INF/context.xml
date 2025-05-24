@@ -1,0 +1,10 @@
+<Context path="/httpsApp">
+    <Resource name="jdbc/pr2" auth="Container"
+              type="javax.sql.DataSource"
+              maxTotal="20" maxIdle="10" maxWaitMillis="-1"
+              username="pr2"
+              password="pr2"
+              driverClassName="org.apache.derby.jdbc.ClientDriver"
+              url="jdbc:derby://localhost:1527/pr2"
+              />
+</Context>
