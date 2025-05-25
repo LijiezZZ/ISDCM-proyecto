@@ -130,9 +130,12 @@
 
                 <!-- Botón agregar video -->
                 <div class="col-lg-2 col-md-3 col-sm-12 text-end mt-2 mt-md-0">
-                    
+
                     <a href="${pageContext.request.contextPath}/servletRegistroVid?titulo=${param.titulo}&autor=${param.autor}&fecha=${param.fecha}" class="btn btn-dark">
                         <i class="fas fa-plus"></i>
+                    </a>
+                    <a href="${pageContext.request.contextPath}/vista/xml.jsp" class="btn btn-secondary">
+                        <i class="fas fa-lock"></i>
                     </a>
                 </div>
             </div>

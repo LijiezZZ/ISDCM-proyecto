@@ -10,29 +10,39 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import javax.crypto.Cipher;
+import javax.crypto.CipherInputStream;
+import javax.crypto.SecretKey;
+import javax.crypto.spec.SecretKeySpec;
+import modelo.Video;
 
 /**
  * Servlet encargado de servir archivos de vídeo guardados fuera del WAR.
- * 
- * Este servlet recibe una ruta lógica como parámetro (`localizacion`), 
- * extrae el nombre del archivo, y lo busca dentro del directorio persistente 
- * del proyecto (`/videosRegistrados` ubicado en la raíz del proyecto Frontend).
- * 
- * Funciona como intermediario entre la lógica de la aplicación y el sistema de archivos,
- * permitiendo la reproducción de vídeos mediante URLs seguras y controladas.
- * 
+ *
+ * Este servlet recibe una ruta lógica como parámetro (`localizacion`), extrae
+ * el nombre del archivo, y lo busca dentro del directorio persistente del
+ * proyecto (`/videosRegistrados` ubicado en la raíz del proyecto Frontend).
+ *
+ * Funciona como intermediario entre la lógica de la aplicación y el sistema de
+ * archivos, permitiendo la reproducción de vídeos mediante URLs seguras y
+ * controladas.
+ *
  * URL de acceso: /servletVid?localizacion=/VideosRegistrados/archivo.mp4
- * 
+ *
  * Ruta real de almacenamiento en disco (ejemplo en entorno local):
  * `/home/alumne/NetBeansProjects/ISDCM-proyecto/Frontend/videosRegistrados`
- * 
- * El archivo debe haber sido previamente guardado en esta ruta durante el registro del vídeo.
- * 
+ *
+ * El archivo debe haber sido previamente guardado en esta ruta durante el
+ * registro del vídeo.
+ *
  * Tipo de contenido servido: video/mp4
- * 
- * Este servlet **no forma parte del flujo MVC clásico**, ya que actúa como un 
+ *
+ * Este servlet **no forma parte del flujo MVC clásico**, ya que actúa como un
  * componente técnico especializado en servir contenido binario.
- * 
+ *
  * @author Kenny Alejandro
  */
 @WebServlet("/servletVid")
@@ -40,14 +50,17 @@ public class servletVid extends HttpServlet {
 
     /**
      * Maneja solicitudes GET para servir archivos de vídeo.
-     * 
+     *
      * Extrae el nombre del archivo a partir del parámetro 'localizacion',
-     * localiza el fichero en disco y lo escribe directamente en la respuesta HTTP.
-     * 
-     * @param request  La solicitud HTTP entrante, que debe contener el parámetro 'localizacion'
+     * localiza el fichero en disco y lo escribe directamente en la respuesta
+     * HTTP.
+     *
+     * @param request La solicitud HTTP entrante, que debe contener el parámetro
+     * 'localizacion'
      * @param response La respuesta HTTP que servirá el archivo de vídeo
-     * @throws ServletException Si ocurre un error en el procesamiento del servlet
-     * @throws IOException      Si ocurre un error de lectura o escritura de archivos
+     * @throws ServletException Si ocurre un error en el procesamiento del
+     * servlet
+     * @throws IOException Si ocurre un error de lectura o escritura de archivos
      */
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
@@ -75,16 +88,34 @@ public class servletVid extends HttpServlet {
         response.setContentType("video/mp4");
         response.setContentLengthLong(videoFile.length());
 
-        try (InputStream in = new FileInputStream(videoFile);
-             OutputStream out = response.getOutputStream()) {
+        try (
+            FileInputStream fis = new FileInputStream(videoFile); OutputStream os = response.getOutputStream()) {
+            String keyString = loadAESKey();
+            SecretKey key = new SecretKeySpec(keyString.getBytes(), "AES");
+            
+            Cipher cipher = Cipher.getInstance("AES");
+            cipher.init(Cipher.DECRYPT_MODE, key);
 
-            byte[] buffer = new byte[8192];
-            int bytesRead;
-
-            while ((bytesRead = in.read(buffer)) != -1) {
-                out.write(buffer, 0, bytesRead);
+            try (CipherInputStream cis = new CipherInputStream(fis, cipher)) {
+                byte[] buffer = new byte[8192];
+                int bytesRead;
+                while ((bytesRead = cis.read(buffer)) != -1) {
+                    os.write(buffer, 0, bytesRead);
+                }
             }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Error al desencriptar el video");
         }
+    }
+    
+    private String loadAESKey() throws IOException {
+        String realPath = getServletContext().getRealPath("/");
+        String basePath = realPath.split("target")[0];
+        String folderPath = basePath + "Clave";
+        Path keyPath = Paths.get(folderPath, "clave.key");
+        return Files.readString(keyPath).trim();
     }
 
     /**
