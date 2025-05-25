@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<DIDL xmlns="urn:mpeg:mpeg21:2002:02-DIDL-NS" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="urn:mpeg:mpeg21:2002:02-DIDL-NS didl.xsd">
+    	
+    <Item>
+        		
+        <Component>
+            			
+            <Descriptor>
+                				
+                <Statement mimeType="text/xml">
+                    					
+                    <metadata>
+                        <xenc:EncryptedData xmlns:xenc="http://www.w3.org/2001/04/xmlenc#" Type="http://www.w3.org/2001/04/xmlenc#Content">
+                            <xenc:EncryptionMethod Algorithm="http://www.w3.org/2001/04/xmlenc#aes128-cbc"/>
+                            <ds:KeyInfo xmlns:ds="http://www.w3.org/2000/09/xmldsig#">
+</ds:KeyInfo>
+                            <xenc:CipherData>
+                                <xenc:CipherValue>zWtYPnnzm0wxdQy0ZgSiMxoxyvD5Q5cKE62dyT4Mvxy5A0tcKkil2PF1lA1Cu+gFeNoNI9lo8xCx&#13;
+XijWT7nA14IyjGVXizgu1qbqiOTA4tZx2RHRGTDWMCWH1drMIk/UrDY8ZAg+7a0a16rGtSMlVab8&#13;
+NNpJ5Z0TEsSSzlcbEcXlzkZNWiZCc6rrlOgvM49KinVXipF34usWVEgS/opaDnPIIw5MCnVYu1Fx&#13;
+oU4KDiExEh6xuTZZuoZV9FtSgkABkgst+a2hlsidgUGVk0Qo6oJ5X4r2yVesedvM/jc9rZY=</xenc:CipherValue>
+                            </xenc:CipherData>
+                        </xenc:EncryptedData>
+                    </metadata>
+                    				
+                </Statement>
+                			
+            </Descriptor>
+            			
+            <Resource mimeType="video/mp4" ref="film1li.mp4"/>
+            		
+        </Component>
+        	
+    </Item>
+    
+</DIDL>
