@@ -27,7 +27,7 @@ import java.util.stream.Collectors;
  * 
  * @author Kennny Alejandro/ Lijie Yin
  */
-@Path("videos")
+@Path("videos") 
 public class VideoResource {
 
     private VideoDAO videoDAO = new VideoDAO();

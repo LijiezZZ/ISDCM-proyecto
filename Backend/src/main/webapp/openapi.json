@@ -3,25 +3,28 @@
   "info": {
     "title": "ISDCM Video API",
     "version": "1.0",
-    "description": "API RESTful para la gesti\u00f3n de v\u00eddeos en la plataforma ISDCM."
+    "description": "API RESTful para la gestión de vídeos en la plataforma ISDCM."
   },
   "tags": [
     {
+      "name": "Autenticación",
+      "description": "Operaciones de autenticación de usuarios"
+    },
+    {
       "name": "Videos",
-      "description": "Operaciones relacionadas con la gesti\u00f3n de v\u00eddeos"
+      "description": "Operaciones relacionadas con la gestión de vídeos"
     }
   ],
   "servers": [
-  {
-    "url": "/Backend/resources",
-    "description": "API base path"
-  }
-    ],
-
+    {
+      "url": "/Backend/resources",
+      "description": "API base path"
+    }
+  ],
   "paths": {
     "/videos": {
       "get": {
-        "summary": "Listar todos los v\u00eddeos",
+        "summary": "Listar todos los vídeos",
         "tags": [
           "Videos"
         ],
@@ -29,7 +32,7 @@
           {
             "name": "top",
             "in": "query",
-            "description": "N\u00famero m\u00e1ximo de resultados a devolver",
+            "description": "Número máximo de resultados a devolver",
             "required": false,
             "schema": {
               "type": "integer"
@@ -38,7 +41,7 @@
         ],
         "responses": {
           "200": {
-            "description": "Lista de v\u00eddeos",
+            "description": "Lista de vídeos",
             "content": {
               "application/json": {
                 "schema": {
@@ -50,10 +53,15 @@
               }
             }
           }
-        }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
       },
       "post": {
-        "summary": "Registrar un nuevo v\u00eddeo",
+        "summary": "Registrar un nuevo vídeo",
         "tags": [
           "Videos"
         ],
@@ -69,17 +77,22 @@
         },
         "responses": {
           "201": {
-            "description": "V\u00eddeo creado"
+            "description": "Vídeo creado"
           },
           "500": {
-            "description": "Error al registrar el v\u00eddeo"
+            "description": "Error al registrar el vídeo"
           }
-        }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
       }
     },
     "/videos/buscar": {
       "get": {
-        "summary": "Buscar v\u00eddeos con filtros",
+        "summary": "Buscar vídeos con filtros",
         "tags": [
           "Videos"
         ],
@@ -137,7 +150,7 @@
         ],
         "responses": {
           "200": {
-            "description": "Resultados de la b\u00fasqueda",
+            "description": "Resultados de la búsqueda",
             "content": {
               "application/json": {
                 "schema": {
@@ -149,12 +162,17 @@
               }
             }
           }
-        }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
       }
     },
     "/videos/{id}": {
       "get": {
-        "summary": "Obtener v\u00eddeo por ID",
+        "summary": "Obtener vídeo por ID",
         "tags": [
           "Videos"
         ],
@@ -170,7 +188,7 @@
         ],
         "responses": {
           "200": {
-            "description": "V\u00eddeo encontrado",
+            "description": "Vídeo encontrado",
             "content": {
               "application/json": {
                 "schema": {
@@ -180,12 +198,17 @@
             }
           },
           "404": {
-            "description": "V\u00eddeo no encontrado"
+            "description": "Vídeo no encontrado"
           }
-        }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
       },
       "put": {
-        "summary": "Actualizar v\u00eddeo por ID",
+        "summary": "Actualizar vídeo por ID",
         "tags": [
           "Videos"
         ],
@@ -211,15 +234,20 @@
         },
         "responses": {
           "200": {
-            "description": "V\u00eddeo actualizado"
+            "description": "Vídeo actualizado"
           },
           "404": {
-            "description": "V\u00eddeo no encontrado"
+            "description": "Vídeo no encontrado"
           }
-        }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
       },
       "delete": {
-        "summary": "Eliminar v\u00eddeo por ID",
+        "summary": "Eliminar vídeo por ID",
         "tags": [
           "Videos"
         ],
@@ -235,17 +263,22 @@
         ],
         "responses": {
           "200": {
-            "description": "V\u00eddeo eliminado"
+            "description": "Vídeo eliminado"
           },
           "404": {
-            "description": "V\u00eddeo no encontrado"
+            "description": "Vídeo no encontrado"
           }
-        }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
       }
     },
     "/videos/visualizar/{id}": {
       "post": {
-        "summary": "Incrementar contador de visualizaci\u00f3n",
+        "summary": "Incrementar contador de visualización",
         "tags": [
           "Videos"
         ],
@@ -261,14 +294,19 @@
         ],
         "responses": {
           "200": {
-            "description": "Reproducci\u00f3n contada"
+            "description": "Reproducción contada"
           }
-        }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
       }
     },
     "/videos/{id}/propietario": {
       "get": {
-        "summary": "Verificar si un usuario es propietario del v\u00eddeo",
+        "summary": "Verificar si un usuario es propietario del vídeo",
         "tags": [
           "Videos"
         ],
@@ -292,7 +330,7 @@
         ],
         "responses": {
           "200": {
-            "description": "Resultado de la verificaci\u00f3n",
+            "description": "Resultado de la verificación",
             "content": {
               "application/json": {
                 "schema": {
@@ -301,12 +339,17 @@
               }
             }
           }
-        }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
       }
     },
     "/videos/existe": {
       "get": {
-        "summary": "Verificar si un v\u00eddeo ya fue registrado por un usuario",
+        "summary": "Verificar si un vídeo ya fue registrado por un usuario",
         "tags": [
           "Videos"
         ],
@@ -338,6 +381,64 @@
                 }
               }
             }
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      }
+    },
+    "/login": {
+      "post": {
+        "summary": "Iniciar sesión y obtener JWT",
+        "description": "Permite a un usuario autenticarse y recibir un JWT para futuras solicitudes.",
+        "tags": [
+          "Autenticación"
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/x-www-form-urlencoded": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "username": {
+                    "type": "string"
+                  },
+                  "password": {
+                    "type": "string",
+                    "format": "password" 
+                  }
+                },
+                "required": [
+                  "username",
+                  "password"
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "JWT generado con éxito",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "JWT": {
+                      "type": "string",
+                      "description": "Token JWT generado"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Credenciales inválidas"
           }
         }
       }
@@ -380,6 +481,18 @@
           }
         }
       }
+    },
+    "securitySchemes": {
+      "bearerAuth": {
+        "type": "http",
+        "scheme": "bearer",
+        "bearerFormat": "JWT"
+      }
     }
-  }
+  },
+  "security": [
+    {
+      "bearerAuth": []
+    }
+  ]
 }
