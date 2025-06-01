@@ -241,7 +241,7 @@ public class servletRegistroVid extends HttpServlet {
 
         } catch (Exception e) {
             e.printStackTrace();
-            System.out.println("❌ Error al cifrar y guardar el archivo.");
+            System.out.println("Error al cifrar y guardar el archivo.");
         }
     }
 

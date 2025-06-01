@@ -17,7 +17,7 @@ import java.util.List;
  * 
  * URL base esperada del backend: http://localhost:8180/Backend/resources/videos
  * 
- * Requiere la dependencia Jackson para la conversión JSON <-> Java.
+ * Requiere la dependencia Jackson para la conversión JSON ↔ Java.
  * 
  * @author Kenny Alejandro
  */

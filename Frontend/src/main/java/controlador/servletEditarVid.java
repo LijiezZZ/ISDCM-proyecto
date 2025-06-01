@@ -27,6 +27,15 @@
     @WebServlet("/servletEditarVid")
     public class servletEditarVid extends HttpServlet {
 
+        /**
+        * Servicio REST que permite interactuar con los recursos de vídeo del backend.
+        *
+        * Esta instancia se utiliza para realizar operaciones como obtener la lista de vídeos,
+        * registrar nuevos vídeos, actualizar información o eliminar registros,
+        * comunicándose con el backend mediante peticiones HTTP (GET, POST, PUT, DELETE).
+        *
+        * El servicio encapsula la lógica de acceso remoto y deserialización de respuestas JSON.
+        */
         private final ServicioVideoREST servicio = new ServicioVideoREST();
 
         private Usuario obtenerUsuario(HttpServletRequest request, HttpServletResponse response) throws IOException {

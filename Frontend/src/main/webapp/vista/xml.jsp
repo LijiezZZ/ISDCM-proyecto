@@ -72,8 +72,8 @@
                             <div class="mb-3"> 
                                 <label for="encrypt-mode" class="form-label">Modo de encriptación</label> 
                                 <select class="form-select" id="encrypt-mode" name="mode" required>
-                                    <option value="element" selected>Elemento</option>
                                     <option value="content">Contenido de un elemento</option>
+                                    <option value="element" selected>Elemento</option>
                                     <option value="document">Todo el documento</option> 
                                 </select> 
                             </div>
