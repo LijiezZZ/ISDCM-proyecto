@@ -25,16 +25,24 @@ public class ServicioVideoREST {
 
     private static final String API_BASE_URL = "http://localhost:8180/Backend/resources/videos";
     private final ObjectMapper mapper = new ObjectMapper();
+    private String jwtToken;
 
-    /**
-     * Obtiene todos los vídeos registrados en el sistema desde la API REST.
-     * 
-     * @return Lista de objetos Video
-     * @throws IOException si hay problemas de conexión o lectura del backend
-     */
+    public void setJwtToken(String jwtToken) {
+        this.jwtToken = jwtToken;
+    }
+
+    private HttpURLConnection crearConexionConAuth(String urlStr, String method) throws IOException {
+        HttpURLConnection conn = (HttpURLConnection) new URL(urlStr).openConnection();
+        conn.setRequestMethod(method);
+        if (jwtToken != null) {
+            conn.setRequestProperty("Authorization", "Bearer " + jwtToken);
+        }
+        return conn;
+    }
+
+
     public List<Video> obtenerTodos() throws IOException {
-        HttpURLConnection conn = (HttpURLConnection) new URL(API_BASE_URL).openConnection();
-        conn.setRequestMethod("GET");
+        HttpURLConnection conn = crearConexionConAuth(API_BASE_URL, "GET");
 
         try (BufferedReader reader = new BufferedReader(new InputStreamReader(conn.getInputStream()))) {
             return mapper.readValue(reader, new TypeReference<List<Video>>() {});
@@ -61,8 +69,7 @@ public class ServicioVideoREST {
 
         String urlFinal = API_BASE_URL + "/buscar" + query.toString();
 
-        HttpURLConnection conn = (HttpURLConnection) new URL(urlFinal).openConnection();
-        conn.setRequestMethod("GET");
+        HttpURLConnection conn = crearConexionConAuth(urlFinal, "GET");
 
         try (BufferedReader reader = new BufferedReader(new InputStreamReader(conn.getInputStream()))) {
             return mapper.readValue(reader, new TypeReference<List<Video>>() {});
@@ -77,8 +84,7 @@ public class ServicioVideoREST {
      * @throws IOException si no se puede conectar o parsear la respuesta
      */
     public Video getVideoPorId(int id) throws IOException {
-        HttpURLConnection conn = (HttpURLConnection) new URL(API_BASE_URL + "/" + id).openConnection();
-        conn.setRequestMethod("GET");
+        HttpURLConnection conn = crearConexionConAuth(API_BASE_URL + "/" + id, "GET");
 
         try (BufferedReader reader = new BufferedReader(new InputStreamReader(conn.getInputStream()))) {
             return mapper.readValue(reader, Video.class);
@@ -94,8 +100,7 @@ public class ServicioVideoREST {
      * @throws IOException si hay error de conexión o respuesta
      */
     public boolean registrarVideo(Video video) throws IOException {
-        HttpURLConnection conn = (HttpURLConnection) new URL(API_BASE_URL).openConnection();
-        conn.setRequestMethod("POST");
+        HttpURLConnection conn = crearConexionConAuth(API_BASE_URL, "POST");
         conn.setDoOutput(true);
         conn.setRequestProperty("Content-Type", "application/json");
 
@@ -115,8 +120,7 @@ public class ServicioVideoREST {
      * @throws IOException si la petición falla
      */
     public boolean actualizarVideo(int id, Video videoActualizado) throws IOException {
-        HttpURLConnection conn = (HttpURLConnection) new URL(API_BASE_URL + "/" + id).openConnection();
-        conn.setRequestMethod("PUT");
+        HttpURLConnection conn = crearConexionConAuth(API_BASE_URL + "/" + id, "PUT");
         conn.setDoOutput(true);
         conn.setRequestProperty("Content-Type", "application/json");
 
@@ -135,8 +139,7 @@ public class ServicioVideoREST {
      * @throws IOException si ocurre error al llamar a la API
      */
     public boolean eliminarVideo(int id) throws IOException {
-        HttpURLConnection conn = (HttpURLConnection) new URL(API_BASE_URL + "/" + id).openConnection();
-        conn.setRequestMethod("DELETE");
+        HttpURLConnection conn = crearConexionConAuth(API_BASE_URL + "/" + id, "DELETE");
         return conn.getResponseCode() == HttpURLConnection.HTTP_OK;
     }
 
@@ -148,8 +151,7 @@ public class ServicioVideoREST {
      * @throws IOException si ocurre un error de conexión
      */
     public Video visualizarVideo(int id) throws IOException {
-        HttpURLConnection conn = (HttpURLConnection) new URL(API_BASE_URL + "/visualizar/" + id).openConnection();
-        conn.setRequestMethod("POST");
+        HttpURLConnection conn = crearConexionConAuth(API_BASE_URL + "/visualizar/" + id, "POST");
 
         try (BufferedReader reader = new BufferedReader(new InputStreamReader(conn.getInputStream()))) {
             return mapper.readValue(reader, Video.class);
@@ -165,8 +167,7 @@ public class ServicioVideoREST {
      * @throws IOException si hay error al verificar
      */
     public boolean esPropietario(int videoId, int userId) throws IOException {
-        HttpURLConnection conn = (HttpURLConnection) new URL(API_BASE_URL + "/" + videoId + "/propietario?userId=" + userId).openConnection();
-        conn.setRequestMethod("GET");
+        HttpURLConnection conn = crearConexionConAuth(API_BASE_URL + "/" + videoId + "/propietario?userId=" + userId, "GET");
 
         try (BufferedReader reader = new BufferedReader(new InputStreamReader(conn.getInputStream()))) {
             return Boolean.parseBoolean(reader.readLine());
@@ -183,8 +184,7 @@ public class ServicioVideoREST {
      */
     public boolean existeVideo(String titulo, int userId) throws IOException {
         titulo = URLEncoder.encode(titulo, StandardCharsets.UTF_8.toString());
-        HttpURLConnection conn = (HttpURLConnection) new URL(API_BASE_URL + "/existe?titulo=" + titulo + "&userId=" + userId).openConnection();
-        conn.setRequestMethod("GET");
+        HttpURLConnection conn = crearConexionConAuth(API_BASE_URL + "/existe?titulo=" + titulo + "&userId=" + userId, "GET");
 
         try (BufferedReader reader = new BufferedReader(new InputStreamReader(conn.getInputStream()))) {
             return Boolean.parseBoolean(reader.readLine());

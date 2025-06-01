@@ -14,6 +14,7 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
+import servicio.ServicioAuthREST;
 
 /**
  * Servlet que gestiona las operaciones relacionadas con los usuarios:
@@ -101,38 +102,53 @@ public class servletUsuarios extends HttpServlet {
      * @param response Redirección a listado de videos o login con error
      */
     private void handleLogin(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        String username = request.getParameter("username");
-        String password = request.getParameter("password");
+    String username = request.getParameter("username");
+    String password = request.getParameter("password");
 
-        UsuarioDAO usuarioDAO = new UsuarioDAO();
+    UsuarioDAO usuarioDAO = new UsuarioDAO();
 
-        if (!usuarioDAO.isUsernameRegistered(username)) {
-            redirectToLoginWithError(request, response, "Usuario o contraseña incorrectos.");
+    if (!usuarioDAO.isUsernameRegistered(username)) {
+        redirectToLoginWithError(request, response, "Usuario o contraseña incorrectos.");
+        return;
+    }
+
+    Usuario user = usuarioDAO.authenticateUser(username, password);
+    if (user != null) {
+        if (usuarioDAO.isUserBlocked(username)) {
+            redirectToLoginWithError(request, response, "Su cuenta está bloqueada, inténtelo más tarde.");
             return;
         }
 
-        Usuario user = usuarioDAO.authenticateUser(username, password);
-        if (user != null) {
-            if (usuarioDAO.isUserBlocked(username)) {
-                redirectToLoginWithError(request, response, "Su cuenta está bloqueada, inténtelo más tarde.");
-                return;
-            }
+        usuarioDAO.resetIndFallos(username);
 
-            usuarioDAO.resetIndFallos(username);
-            HttpSession session = request.getSession();
-            session.setAttribute("user", user);
-            response.sendRedirect(request.getContextPath() + "/servletListadoVid");
-        } else {
-            usuarioDAO.incrementIndFallos(username);
-            int fallos = usuarioDAO.getIndFallos(username);
+        // Obtener el JWT desde la API REST
+        ServicioAuthREST authService = new ServicioAuthREST();
+        String jwtToken = authService.obtenerTokenDesdeAPI(username, password);
 
-            if (fallos >= 3 && !usuarioDAO.isUserBlocked(username)) {
-                usuarioDAO.blockUser(username);
-            }
-
-            redirectToLoginWithError(request, response, "Usuario o contraseña incorrectos.");
+        if (jwtToken == null) {
+            redirectToLoginWithError(request, response, "Error al obtener el token JWT.");
+            return;
         }
+
+        // Guardar usuario y token en sesión
+        HttpSession session = request.getSession();
+        session.setAttribute("user", user);
+        session.setAttribute("jwt", jwtToken);
+        
+        System.out.println("JWT desde backend : " + jwtToken);
+
+        response.sendRedirect(request.getContextPath() + "/servletListadoVid");
+    } else {
+        usuarioDAO.incrementIndFallos(username);
+        int fallos = usuarioDAO.getIndFallos(username);
+
+        if (fallos >= 3 && !usuarioDAO.isUserBlocked(username)) {
+            usuarioDAO.blockUser(username);
+        }
+
+        redirectToLoginWithError(request, response, "Usuario o contraseña incorrectos.");
     }
+}
 
     /**
      * Procesa el cierre de sesión del usuario actual.

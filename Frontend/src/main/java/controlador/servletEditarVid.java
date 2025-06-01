@@ -10,6 +10,7 @@
     import jakarta.servlet.http.HttpSession;
     import modelo.Usuario;
     import modelo.Video;
+import servicio.ServicioHelper;
     import servicio.ServicioVideoREST;
 
     /**
@@ -36,7 +37,8 @@
         *
         * El servicio encapsula la lógica de acceso remoto y deserialización de respuestas JSON.
         */
-        private final ServicioVideoREST servicio = new ServicioVideoREST();
+        //private final ServicioVideoREST servicio = new ServicioVideoREST();
+        
 
         private Usuario obtenerUsuario(HttpServletRequest request, HttpServletResponse response) throws IOException {
             HttpSession session = request.getSession(false);
@@ -54,6 +56,7 @@
             if (idParam != null) {
                 try {
                     int id = Integer.parseInt(idParam);
+                    ServicioVideoREST servicio = ServicioHelper.getServicioVideo(request);
                     Video video = servicio.getVideoPorId(id);
                     if (video != null) {
                         request.setAttribute("video", video);
@@ -82,6 +85,7 @@
             if (videoIdParam != null) {
                 try {
                     int videoId = Integer.parseInt(videoIdParam);
+                    ServicioVideoREST servicio = ServicioHelper.getServicioVideo(request);
                     Video video = servicio.getVideoPorId(videoId);
 
                     if (video != null) {
@@ -141,6 +145,7 @@
             }
 
             Video actualizado = new Video(titulo, autor, descripcion);
+            ServicioVideoREST servicio = ServicioHelper.getServicioVideo(request);
             boolean ok = servicio.actualizarVideo(idVid, actualizado);
 
             if (ok) {

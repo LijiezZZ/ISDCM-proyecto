@@ -9,6 +9,7 @@ import servicio.ServicioVideoREST;
 
 import java.io.IOException;
 import java.util.List;
+import servicio.ServicioHelper;
 
 /**
  * Servlet que maneja el listado de videos, así como las acciones de edición y
@@ -35,7 +36,7 @@ public class servletListadoVid extends HttpServlet {
     *
     * El servicio encapsula la lógica de acceso remoto y deserialización de respuestas JSON.
     */
-    private final ServicioVideoREST servicioVideo = new ServicioVideoREST();
+    //private final ServicioVideoREST servicioVideo = new ServicioVideoREST();
 
     /**
      * Verifica si el usuario tiene una sesión activa y devuelve su objeto
@@ -89,7 +90,8 @@ public class servletListadoVid extends HttpServlet {
         author != null ? author : "",
         date != null ? date : "");
 
-        
+        ServicioVideoREST servicioVideo = ServicioHelper.getServicioVideo(request);
+
         switch (action) {
             case "edit":
                 String videoIdEdit = request.getParameter("id");
