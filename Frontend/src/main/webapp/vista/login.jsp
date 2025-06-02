@@ -22,7 +22,12 @@
             <div class="login-container">
                 <h3 class="text-center">Iniciar Sesión</h3>
                 <div class="error-container" style="min-height: 50px;">
-                    <% String error = (String) request.getAttribute("error"); %>
+                    <%  
+                        String error = request.getParameter("error");
+                        if (error == null) {
+                            error = (String) request.getAttribute("error");
+                        }
+                    %>
                     <% if (error != null) { %>
                     <div class="alert alert-danger text-center"><%= error %></div>
                     <% } %>

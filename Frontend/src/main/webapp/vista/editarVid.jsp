@@ -7,19 +7,26 @@
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <%@ page session="true" %>
 <%@ page import="modelo.Usuario" %>
+<%@ page import="java.net.URLEncoder" %>
+<%@ page import="helper.JwtUtils"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 
 <%
     // Verificación de sesión (lógica de respaldo)
     jakarta.servlet.http.HttpSession sessionUser = request.getSession(false);
     if (sessionUser == null || sessionUser.getAttribute("user") == null) {
-        response.sendRedirect("login.jsp");
+        response.sendRedirect("vista/login.jsp");
         return;
     }
     
     String usuario = null;
     Usuario user = (Usuario) sessionUser.getAttribute("user");
     usuario = user.getUsername();
+     String token = (String) session.getAttribute("jwt");
+    if (token == null || JwtUtils.isTokenExpired(token)) {
+        response.sendRedirect("vista/login.jsp?error=" + URLEncoder.encode("Tu sesion ha expirado. Por favor, inicia sesion nuevamente.", "UTF-8"));
+        return;
+    }
 %>
 
 <!DOCTYPE html>

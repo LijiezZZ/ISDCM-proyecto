@@ -8,6 +8,8 @@
 <%@ page import="jakarta.servlet.http.HttpSession" %>
 <%@ page import="modelo.Usuario" %>
 <%@ page import="modelo.Video" %>
+<%@ page import="java.net.URLEncoder" %>
+<%@ page import="utils.JwtUtils"%>
 <%@ page import="java.util.List" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 
@@ -27,6 +29,12 @@
     String usuario = null;
     Usuario user = (Usuario) sessionUser.getAttribute("user");
     usuario = user.getUsername();
+    
+    String token = (String) session.getAttribute("jwt");
+    if (token == null || JwtUtils.isTokenExpired(token)) {
+        response.sendRedirect("login.jsp?error=" + URLEncoder.encode("Tu sesion ha expirado. Por favor, inicia sesion nuevamente.", "UTF-8"));
+        return;
+    }
 %>
 <!DOCTYPE html>
 <html lang="es">

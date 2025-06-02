@@ -7,11 +7,13 @@
 <%@ page session="true" %>
 <%@ page import="jakarta.servlet.http.HttpSession" %>
 <%@ page import="modelo.Usuario" %>
+<%@ page import="java.net.URLEncoder" %>
+<%@ page import="utils.JwtUtils"%>
 
 <%
     HttpSession sessionUser = request.getSession(false);
     if (sessionUser == null || sessionUser.getAttribute("user") == null) {
-        response.sendRedirect("login.jsp");
+        response.sendRedirect("vista/login.jsp");
         return;
     }
 
@@ -20,6 +22,11 @@
     String email = user.getEmail();
     String nombre = user.getNombre();
     String apellidos = user.getApellidos();
+    String token = (String) session.getAttribute("jwt");
+    if (token == null || JwtUtils.isTokenExpired(token)) {
+        response.sendRedirect("vista/login.jsp?error=" + URLEncoder.encode("Tu sesion ha expirado. Por favor, inicia sesion nuevamente.", "UTF-8"));
+        return;
+    }
 %>
 
 <!DOCTYPE html>
