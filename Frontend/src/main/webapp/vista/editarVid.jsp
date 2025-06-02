@@ -8,7 +8,7 @@
 <%@ page session="true" %>
 <%@ page import="modelo.Usuario" %>
 <%@ page import="java.net.URLEncoder" %>
-<%@ page import="helper.JwtUtils"%>
+<%@ page import="utils.JwtUtils"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 
 <%

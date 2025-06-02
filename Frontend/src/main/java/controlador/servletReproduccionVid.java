@@ -8,6 +8,7 @@ import modelo.Video;
 import servicio.ServicioVideoREST;
 
 import java.io.IOException;
+import servicio.ServicioHelper;
 
 /**
  * Servlet que maneja la reproducción de video y aumento de visualizaciones.
@@ -20,16 +21,6 @@ import java.io.IOException;
 @WebServlet("/servletReproduccionVid")
 public class servletReproduccionVid extends HttpServlet {
 
-    /**
-    * Servicio REST que permite interactuar con los recursos de vídeo del backend.
-    *
-    * Esta instancia se utiliza para realizar operaciones como obtener la lista de vídeos,
-    * registrar nuevos vídeos, actualizar información o eliminar registros,
-    * comunicándose con el backend mediante peticiones HTTP (GET, POST, PUT, DELETE).
-    *
-    * El servicio encapsula la lógica de acceso remoto y deserialización de respuestas JSON.
-    */
-    private final ServicioVideoREST servicioVideo = new ServicioVideoREST();
 
     /**
      * Verifica si el usuario tiene una sesión activa y devuelve su objeto
@@ -72,6 +63,8 @@ public class servletReproduccionVid extends HttpServlet {
         request.setAttribute("tituloBuscado", request.getParameter("titulo"));
         request.setAttribute("autorBuscado", request.getParameter("autor"));
         request.setAttribute("fechaBuscada", request.getParameter("fecha"));
+        
+        ServicioVideoREST servicioVideo = ServicioHelper.getServicioVideo(request);
 
         String videoIdPlay = request.getParameter("id");
         int videoId = Integer.parseInt(videoIdPlay);

@@ -114,10 +114,7 @@
                         <a href="${pageContext.request.contextPath}/servletListadoVid" class="btn btn-secondary w-100">Volver al listado</a>
                     </div>
                 </form>
-                    <%
-                        String token = (String) session.getAttribute("jwt");
-                    %>
-
+                    
                     <% if (token != null) { %>
                         <div class="text-center mt-5">
                             <h5>Token JWT asignado</h5>

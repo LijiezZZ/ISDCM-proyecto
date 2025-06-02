@@ -29,6 +29,7 @@ import javax.crypto.Cipher;
 import javax.crypto.CipherOutputStream;
 import javax.crypto.spec.SecretKeySpec;
 import java.security.Key;
+import servicio.ServicioHelper;
 
 /**
  * Servlet encargado de procesar el registro de nuevos videos por parte de
@@ -120,15 +121,15 @@ public class servletRegistroVid extends HttpServlet {
         video.setCreacionTimestamp(nowFormatted);
         video.setModificacionTimestamp(nowFormatted);
 
-        ServicioVideoREST servicio = new ServicioVideoREST();
-
-        if (servicio.existeVideo(title, userId)) {
+        ServicioVideoREST servicioVideo = ServicioHelper.getServicioVideo(request);
+        
+        if (servicioVideo.existeVideo(title, userId)) {
             request.setAttribute("error", "Ya ha registrado un video con este título previamente");
             request.getRequestDispatcher("vista/registroVid.jsp").forward(request, response);
             return;
         }
 
-        if (servicio.registrarVideo(video)) {
+        if (servicioVideo.registrarVideo(video)) {
             saveVideoFile(request.getPart("videoFile"), storedFilename);
 
             String tituloFiltro = request.getParameter("tituloBuscado");
