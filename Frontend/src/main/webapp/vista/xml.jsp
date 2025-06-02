@@ -20,7 +20,7 @@
     
     String token = (String) session.getAttribute("jwt");
     if (token == null || JwtUtils.isTokenExpired(token)) {
-        response.sendRedirect("vista/login.jsp?error=" + URLEncoder.encode("Tu sesion ha expirado. Por favor, inicia sesion nuevamente.", "UTF-8"));
+        response.sendRedirect("vista/login.jsp?error=" + URLEncoder.encode("Tu sesión ha expirado. Por favor, inicia sesión nuevamente.", "UTF-8"));
         return;
     }
 %>
@@ -77,13 +77,21 @@
                         <div class="modal-body">
                             <input type="file" name="xmlfile" accept=".xml" class="form-control" required>
                             <br>
-                            <div class="mb-3"> 
-                                <label for="encrypt-mode" class="form-label">Modo de encriptación</label> 
+                            <div class="mb-3">
+                                <label for="encrypt-mode" class="form-label">Modo de encriptación</label>
                                 <select class="form-select" id="encrypt-mode" name="mode" required>
                                     <option value="content">Contenido de un elemento</option>
                                     <option value="element" selected>Elemento</option>
-                                    <option value="document">Todo el documento</option> 
-                                </select> 
+                                    <option value="document">Todo el documento</option>
+                                </select>
+                            </div>
+
+                            <!-- Sección dinámica: selector de elemento XML -->
+                            <div class="mb-3 d-none" id="element-selector-container">
+                                <label for="element-name-select" class="form-label">Selecciona el elemento XML a encriptar</label>
+                                <select class="form-select" id="element-name-select" name="tagName">
+                                    <option value="">Selecciona un elemento</option>
+                                </select>
                             </div>
                         </div>
                         <div class="modal-footer">
@@ -114,6 +122,57 @@
             </div>
         </div>
 
+        <!-- Scripts -->
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+        <script>
+            const encryptMode = document.getElementById("encrypt-mode");
+            const elementSelectorContainer = document.getElementById("element-selector-container");
+            const elementSelect = document.getElementById("element-name-select");
+            const fileInput = document.querySelector('#encryptModal input[name="xmlfile"]');
+
+            encryptMode.addEventListener("change", toggleElementSelector);
+            fileInput.addEventListener("change", handleFileLoad);
+
+            function toggleElementSelector() {
+                const selectedMode = encryptMode.value;
+                if ((selectedMode === "element" || selectedMode === "content") && elementSelect.options.length > 1) {
+                    elementSelectorContainer.classList.remove("d-none");
+                } else {
+                    elementSelectorContainer.classList.add("d-none");
+                }
+            }
+
+            function handleFileLoad(event) {
+                const file = event.target.files[0];
+                if (!file) return;
+
+                const reader = new FileReader();
+                reader.onload = function (e) {
+                    const parser = new DOMParser();
+                    const xmlDoc = parser.parseFromString(e.target.result, "text/xml");
+                    const allElements = Array.from(xmlDoc.getElementsByTagName("*"));
+                    const uniqueNames = [...new Set(allElements.map(el => el.nodeName))];
+
+                    // Limpiar y rellenar el select
+                    elementSelect.innerHTML = '<option value="">Selecciona un elemento</option>';
+                    uniqueNames.forEach(name => {
+                        const option = document.createElement("option");
+                        option.value = name;
+                        option.textContent = name;
+                        elementSelect.appendChild(option);
+                    });
+
+                    toggleElementSelector(); // Mostrar si es necesario
+                };
+
+                reader.readAsText(file);
+            }
+
+            // Al abrir el modal, verificar si se debe mostrar el selector
+            document.getElementById("encryptModal").addEventListener("shown.bs.modal", function () {
+                toggleElementSelector();
+            });
+        </script>
     </body>
 </html>
+

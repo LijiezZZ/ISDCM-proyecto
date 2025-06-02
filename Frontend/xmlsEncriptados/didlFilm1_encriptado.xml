@@ -10,17 +10,28 @@
                 <Statement mimeType="text/xml">
                     					
                     <metadata>
-                        <xenc:EncryptedData xmlns:xenc="http://www.w3.org/2001/04/xmlenc#" Type="http://www.w3.org/2001/04/xmlenc#Content">
-                            <xenc:EncryptionMethod Algorithm="http://www.w3.org/2001/04/xmlenc#aes128-cbc"/>
-                            <ds:KeyInfo xmlns:ds="http://www.w3.org/2000/09/xmldsig#">
+                        						
+                        <id>1</id>
+                        						
+                        <titulo>
+                            <xenc:EncryptedData xmlns:xenc="http://www.w3.org/2001/04/xmlenc#" Type="http://www.w3.org/2001/04/xmlenc#Content">
+                                <xenc:EncryptionMethod Algorithm="http://www.w3.org/2001/04/xmlenc#aes128-cbc"/>
+                                <ds:KeyInfo xmlns:ds="http://www.w3.org/2000/09/xmldsig#">
 </ds:KeyInfo>
-                            <xenc:CipherData>
-                                <xenc:CipherValue>PmUuiKp+7LvEgXLcyrpLR3yLeW1StDP3cSZLlY+Su1FU9BqglGaZX8RnHxW0x/LiZ+Vt726blKQm&#13;
-Xi8snHbY6OPeSynBQIkMzb30rUV3P4zhixJCU5T9SCUyAG4vXvWbPOZaBWufUgFv2OQP9iIOt0JS&#13;
-DpoVlPg4EPnSXQqcsEfBIwnZIjBeSHdTUBADnhg5zDgsagVPE+qj0V5zR6e8qUSep3g7DMnTC6Fx&#13;
-LkqYjC3r5OrMwAm1yT6irjkqwBXlOmAd0rSScyWeLCx9ptKiRpwQlfIkgLxB40AEqV81yYE=</xenc:CipherValue>
-                            </xenc:CipherData>
-                        </xenc:EncryptedData>
+                                <xenc:CipherData>
+                                    <xenc:CipherValue>JSB+tDOtncW5HNIgEWc/3OoqB9emFuoQDGbfJytaSCg=</xenc:CipherValue>
+                                </xenc:CipherData>
+                            </xenc:EncryptedData>
+                        </titulo>
+                        						
+                        <autor>Cary Joji Fukunaga</autor>
+                        						
+                        <anyo>2022</anyo>
+                        						
+                        <duracion>163</duracion>
+                        						
+                        <reproducciones>1150</reproducciones>
+                        					
                     </metadata>
                     				
                 </Statement>

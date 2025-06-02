@@ -25,18 +25,16 @@ import org.apache.xml.security.utils.EncryptionConstants;
 /**
  * Servlet encargado de cifrar y descifrar archivos XML usando el algoritmo AES.
  *
- * Este servlet permite el envío de archivos XML desde un formulario web
- * (via POST) y aplica operaciones de cifrado o descifrado, según la acción
- * seleccionada por el usuario. Utiliza la biblioteca Apache XML Security
- * para aplicar criptografía XML estándar.
+ * Este servlet permite el envío de archivos XML desde un formulario web (via
+ * POST) y aplica operaciones de cifrado o descifrado, según la acción
+ * seleccionada por el usuario. Utiliza la biblioteca Apache XML Security para
+ * aplicar criptografía XML estándar.
  *
- * Soporta tres modos de cifrado:
- * - Documento completo
- * - Solo contenido de una etiqueta específica
- * - Elemento completo con su etiqueta
+ * Soporta tres modos de cifrado: - Documento completo - Solo contenido de una
+ * etiqueta específica - Elemento completo con su etiqueta
  *
- * El archivo XML resultante se guarda en una carpeta del servidor (`/xmlsEncriptados`)
- * y también se muestra su contenido escapado en una JSP.
+ * El archivo XML resultante se guarda en una carpeta del servidor
+ * (`/xmlsEncriptados`) y también se muestra su contenido escapado en una JSP.
  *
  * URL de acceso: /servletXML
  *
@@ -58,15 +56,17 @@ public class servletXML extends HttpServlet {
     }
 
     /**
-     * Maneja las solicitudes POST para aplicar cifrado o descifrado sobre un XML.
+     * Maneja las solicitudes POST para aplicar cifrado o descifrado sobre un
+     * XML.
      *
-     * La acción esperada se indica mediante el parámetro 'action' con valores posibles:
-     * "encrypt" o "decrypt".
+     * La acción esperada se indica mediante el parámetro 'action' con valores
+     * posibles: "encrypt" o "decrypt".
      *
-     * @param request  Solicitud HTTP que contiene el archivo y los parámetros.
+     * @param request Solicitud HTTP que contiene el archivo y los parámetros.
      * @param response Respuesta HTTP que mostrará el resultado.
-     * @throws ServletException En caso de error en el procesamiento del servlet.
-     * @throws IOException      Si ocurre un error de entrada/salida.
+     * @throws ServletException En caso de error en el procesamiento del
+     * servlet.
+     * @throws IOException Si ocurre un error de entrada/salida.
      */
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
@@ -84,24 +84,30 @@ public class servletXML extends HttpServlet {
     /**
      * Procesa el archivo XML recibido y lo cifra de acuerdo al modo indicado.
      *
-     * Modos soportados:
-     * - document: cifra todo el documento
-     * - content: cifra solo el contenido de la etiqueta "metadata"
-     * - element: cifra la etiqueta "metadata" completa
+     * Modos soportados: - document: cifra todo el documento - content: cifra
+     * solo el contenido de la etiqueta "metadata" - element: cifra la etiqueta
+     * "metadata" completa
      *
-     * @param request  Solicitud HTTP con archivo XML y modo de cifrado.
+     * @param request Solicitud HTTP con archivo XML y modo de cifrado.
      * @param response Respuesta HTTP con el archivo cifrado y vista JSP.
      * @throws ServletException Si falla la obtención del archivo.
-     * @throws IOException      Si ocurre un error de entrada/salida.
+     * @throws IOException Si ocurre un error de entrada/salida.
      */
     private void handleEncryption(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
         String mode = request.getParameter("mode");
+        String tagName = request.getParameter("tagName"); // ← nuevo
         Part filePart = request.getPart("xmlfile");
 
         if (filePart == null || filePart.getSize() == 0) {
             request.setAttribute("error", "No XML file received.");
+            request.getRequestDispatcher("vista/xml.jsp").forward(request, response);
+            return;
+        }
+
+        if (tagName == null || tagName.trim().isEmpty()) {
+            request.setAttribute("error", "No tag name provided.");
             request.getRequestDispatcher("vista/xml.jsp").forward(request, response);
             return;
         }
@@ -121,11 +127,11 @@ public class servletXML extends HttpServlet {
                     encryptEntireDocument(doc, key);
                     break;
                 case "content":
-                    encryptElementContent(doc, "metadata", key);
+                    encryptElementContent(doc, tagName, key);
                     break;
                 case "element":
                 default:
-                    encryptElement(doc, "metadata", key);
+                    encryptElement(doc, tagName, key);
                     break;
             }
 
@@ -140,12 +146,13 @@ public class servletXML extends HttpServlet {
     }
 
     /**
-     * Procesa un archivo XML previamente cifrado y lo descifra usando la clave AES.
+     * Procesa un archivo XML previamente cifrado y lo descifra usando la clave
+     * AES.
      *
-     * @param request  Solicitud HTTP con el archivo XML cifrado.
+     * @param request Solicitud HTTP con el archivo XML cifrado.
      * @param response Respuesta HTTP que mostrará el contenido descifrado.
      * @throws ServletException Si ocurre un error en la solicitud.
-     * @throws IOException      Si ocurre un error de lectura o escritura.
+     * @throws IOException Si ocurre un error de lectura o escritura.
      */
     private void handleDecryption(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
@@ -237,11 +244,14 @@ public class servletXML extends HttpServlet {
     }
 
     /**
-     * Carga la clave AES desde el archivo 'clave.key' ubicado en la carpeta raíz del proyecto.
+     * Carga la clave AES desde el archivo 'clave.key' ubicado en la carpeta
+     * raíz del proyecto.
      *
-     * @param request Objeto HttpServletRequest necesario para obtener la ruta base del servidor.
+     * @param request Objeto HttpServletRequest necesario para obtener la ruta
+     * base del servidor.
      * @return Objeto SecretKey creado a partir de la cadena del archivo.
-     * @throws Exception Si el archivo no existe, no se puede leer, o la clave no tiene 16 caracteres.
+     * @throws Exception Si el archivo no existe, no se puede leer, o la clave
+     * no tiene 16 caracteres.
      */
     private SecretKey loadKeyFromFile(HttpServletRequest request) throws Exception {
         String basePath = getServletContext().getRealPath("/");
@@ -254,13 +264,15 @@ public class servletXML extends HttpServlet {
     }
 
     /**
-     * Guarda el documento XML en un archivo en disco y lo convierte a texto escapado para mostrarlo.
+     * Guarda el documento XML en un archivo en disco y lo convierte a texto
+     * escapado para mostrarlo.
      *
-     * @param request  Solicitud HTTP.
+     * @param request Solicitud HTTP.
      * @param response Respuesta HTTP.
-     * @param doc      Documento XML a guardar.
+     * @param doc Documento XML a guardar.
      * @param fileName Nombre del archivo de salida.
-     * @throws Exception Si ocurre un error durante la transformación o escritura.
+     * @throws Exception Si ocurre un error durante la transformación o
+     * escritura.
      */
     private void saveAndDisplayXML(HttpServletRequest request, HttpServletResponse response, Document doc, String fileName)
             throws Exception {
