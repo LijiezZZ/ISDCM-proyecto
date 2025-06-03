@@ -255,7 +255,7 @@ public class servletXML extends HttpServlet {
      */
     private SecretKey loadKeyFromFile(HttpServletRequest request) throws Exception {
         String basePath = getServletContext().getRealPath("/");
-        String keyPath = basePath.split("target")[0] + "Clave/clave.key";
+        String keyPath = basePath.split("target")[0] + "Clave/claveVideo.key";
         String keyStr = Files.readString(Paths.get(keyPath)).trim();
         if (keyStr.length() != 16) {
             throw new Exception("The key must be 16 characters long.");
