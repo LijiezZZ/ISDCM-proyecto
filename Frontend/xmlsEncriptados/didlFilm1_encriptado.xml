@@ -1,47 +1,18 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <DIDL xmlns="urn:mpeg:mpeg21:2002:02-DIDL-NS" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="urn:mpeg:mpeg21:2002:02-DIDL-NS didl.xsd">
-    	
-    <Item>
-        		
-        <Component>
-            			
-            <Descriptor>
-                				
-                <Statement mimeType="text/xml">
-                    					
-                    <metadata>
-                        						
-                        <id>1</id>
-                        						
-                        <titulo>
-                            <xenc:EncryptedData xmlns:xenc="http://www.w3.org/2001/04/xmlenc#" Type="http://www.w3.org/2001/04/xmlenc#Content">
-                                <xenc:EncryptionMethod Algorithm="http://www.w3.org/2001/04/xmlenc#aes128-cbc"/>
-                                <ds:KeyInfo xmlns:ds="http://www.w3.org/2000/09/xmldsig#">
+    <xenc:EncryptedData xmlns:xenc="http://www.w3.org/2001/04/xmlenc#" Type="http://www.w3.org/2001/04/xmlenc#Content">
+        <xenc:EncryptionMethod Algorithm="http://www.w3.org/2001/04/xmlenc#aes128-cbc"/>
+        <ds:KeyInfo xmlns:ds="http://www.w3.org/2000/09/xmldsig#">
 </ds:KeyInfo>
-                                <xenc:CipherData>
-                                    <xenc:CipherValue>SueT9TNfGhEnNRwjR+S9RW3Zsw4g4sJxleJ0ZPh+ksY=</xenc:CipherValue>
-                                </xenc:CipherData>
-                            </xenc:EncryptedData>
-                        </titulo>
-                        						
-                        <autor>Cary Joji Fukunaga</autor>
-                        						
-                        <anyo>2022</anyo>
-                        						
-                        <duracion>163</duracion>
-                        						
-                        <reproducciones>1150</reproducciones>
-                        					
-                    </metadata>
-                    				
-                </Statement>
-                			
-            </Descriptor>
-            			
-            <Resource mimeType="video/mp4" ref="film1li.mp4"/>
-            		
-        </Component>
-        	
-    </Item>
-    
+        <xenc:CipherData>
+            <xenc:CipherValue>QLf0EgqXDRIBKwfPp24naYyEpYndIYo48DP1E8sTw3zglZ84PGpeZvCnvm0cHif2mCX9Ez8nEF9/&#13;
+T4JUH+OULkEMdw4Iv59sfJcL6cIkXsfZ7V6wR9bbKpUHNbthpjnMLP29+Nrkw0kwJurJBI93J8Vy&#13;
+Ypr+FqDZjvHM02j/M4Fo1BdOx3syo6RIoYLi5yPUKiAVBdB4T3AdZ4mJe6HqGlJHaHdEOotsoy9Z&#13;
+OYtADRwk2D03D0NA9oSLKEqFDQa3zHhO/ZIcgc8Dj3WnWLcJHe7seyk6zGXqa080ZryVpSPtToRL&#13;
+zLBYZtzkSeJstLC5ZCwDsJzA0VraxT4QUSwSirEG/1N27irzqYffqLihVbfwibmt52RFZgouLkmr&#13;
+f7vw6de1Q7zgIHNfBxD4RPzCdkrzUuSjvm8ZVta0syNzbyl/YPCb1YsRA5wvfPcvafU0l8COLGQ9&#13;
+7NAmp8395eq/Fb/orfug1pI4GFLSCMuOHj30dOKaSubIDB33Mx8FUMpmLruJT07LRzjc6RXl+onT&#13;
+N83+lUL0UsZ0VaFmOp6SkAWlSejzjKZKRa2YRCumDv3pPDY5fmjYQOuo8B9ZOmHhEA==</xenc:CipherValue>
+        </xenc:CipherData>
+    </xenc:EncryptedData>
 </DIDL>

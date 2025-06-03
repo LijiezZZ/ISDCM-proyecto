@@ -17,6 +17,7 @@ import modelo.dao.UsuarioDAO;
 
 /**
  * Recurso REST para autenticación de usuarios mediante JWT.
+ * @author Kennny Alejandro/ Lijie Yin
  */
 @Path("login")
 public class AuthResource {

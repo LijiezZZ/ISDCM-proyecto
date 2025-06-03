@@ -105,7 +105,7 @@ public class VideoDAO {
     * Obtiene una lista de vídeos ordenados por fecha de creación ascendente.
     * Limita los resultados a un máximo de 1000 elementos.
     *
-    * @param limite Número máximo de vídeos a retornar. Si es <= 0 se usa 100 por defecto.
+    * @param limite Número máximo de vídeos a retornar. Si es menor o igual a 0 se usa 100 por defecto.
     * @return Lista de objetos Video
     */
    public List<Video> getAllVideos(int limite) {

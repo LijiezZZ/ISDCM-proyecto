@@ -19,6 +19,8 @@ import javax.crypto.spec.SecretKeySpec;
 
 /**
  * Filtro de seguridad que intercepta las peticiones REST y valida el JWT.
+ * 
+ * @author Kennny Alejandro/ Lijie Yin
  */
 @Provider
 @Priority(Priorities.AUTHENTICATION)
