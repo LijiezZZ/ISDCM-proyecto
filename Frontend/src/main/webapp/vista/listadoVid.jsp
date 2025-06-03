@@ -143,8 +143,12 @@
                         <i class="fas fa-plus"></i>
                     </a>
                     <a href="${pageContext.request.contextPath}/vista/xml.jsp" class="btn btn-secondary">
-                        <i class="fas fa-lock"></i>
+                        <i class="fas fa-file-code"></i>
                     </a>
+                    <a href="${pageContext.request.contextPath}/vista/jwt.jsp" class="btn btn-secondary">
+                        <i class="fas fa-key"></i>
+                    </a>
+                        
                 </div>
             </div>
 

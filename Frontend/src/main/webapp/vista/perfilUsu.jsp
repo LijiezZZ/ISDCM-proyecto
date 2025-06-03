@@ -114,21 +114,6 @@
                         <a href="${pageContext.request.contextPath}/servletListadoVid" class="btn btn-secondary w-100">Volver al listado</a>
                     </div>
                 </form>
-                    
-                    <% if (token != null) { %>
-                        <div class="text-center mt-5">
-                            <h5>Token JWT asignado</h5>
-                            <div class="bg-light p-3 rounded text-dark" style="word-break: break-all; font-family: monospace; font-size: 0.9em;">
-                                <%= token %>
-                            </div>
-                            <p class="text-muted mt-2" style="font-size: 0.85em;">
-                                Este token es generado tras el login y se utiliza para autenticar tus peticiones a la API REST.
-                                Puedes copiarlo y analizarlo en <a href="https://jwt.io" target="_blank">jwt.io</a>.
-                            </p>
-                        </div>
-                    <% } else { %>
-                        <p class="text-danger mt-3">No se ha generado aún un token JWT para esta sesión.</p>
-                    <% } %>
             </div>
             
         </div>
