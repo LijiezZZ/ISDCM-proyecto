@@ -97,7 +97,7 @@ public class servletXML extends HttpServlet {
             throws ServletException, IOException {
 
         String mode = request.getParameter("mode");
-        String tagName = request.getParameter("tagName"); // ← nuevo
+        String tagName = request.getParameter("tagName");
         Part filePart = request.getPart("xmlfile");
 
         if (filePart == null || filePart.getSize() == 0) {
@@ -106,7 +106,7 @@ public class servletXML extends HttpServlet {
             return;
         }
 
-        if (tagName == null || tagName.trim().isEmpty()) {
+        if (!"document".equals(mode) && (tagName == null || tagName.trim().isEmpty())) {
             request.setAttribute("error", "No tag name provided.");
             request.getRequestDispatcher("vista/xml.jsp").forward(request, response);
             return;
