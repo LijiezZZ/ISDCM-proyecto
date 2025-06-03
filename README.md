@@ -8,6 +8,7 @@ El sistema se compone de:
 
 - Un frontend en Java, desarrollado con NetBeans, que ofrece la interfaz gráfica al usuario.
 - Un servicio backend RESTful en Java, encargado de la lógica de negocio y acceso a datos.
+- Un proyecto adicional para pruebas de HTTPS con un login simple.
 
 Durante el desarrollo se aplicaron buenas prácticas de diseño de software distribuido, manejo eficiente de contenido multimedia, e implementación de medidas de seguridad web.
 
@@ -23,6 +24,7 @@ Durante el desarrollo se aplicaron buenas prácticas de diseño de software dist
 /frontend/javadoc/     → Documentación generada con Javadoc
 /backend/              → API REST en Java
 /backend/javadoc/      → Documentación generada con Javadoc
+/httpsApp/             → Proyecto de prueba para HTTPS con login simple
 ```
 
 ## Entregas
@@ -41,7 +43,7 @@ Durante el desarrollo se aplicaron buenas prácticas de diseño de software dist
 ### Tercera Entrega
 
 - Aplicación de técnicas de seguridad web:
-  - Autenticación y autorización.
+  - Autenticación y autorización mediante JWT
   - Buenas prácticas de protección frente a amenazas comunes.
 
 ## Documentación Técnica
@@ -97,6 +99,53 @@ Modelo de dominio persistente alineado con la estructura de la base de datos. Re
 #### 7. VideoDAO
 Clase de acceso a datos que se comunica con la base de datos mediante JDBC. Ejecuta operaciones SQL para insertar, actualizar, consultar y eliminar vídeos.
 
+---
+
+## Incorporación de JWT
+
+### Backend (API REST)
+
+1. **Configuración Centralizada**:
+   - Se creó el archivo `JwtConfig` para centralizar la clave secreta y el tiempo de expiración del token.
+
+2. **Generación de JWT**:
+   - El recurso `AuthResource` genera un JWT al autenticar al usuario mediante el endpoint `/login`.
+
+3. **Validación de JWT**:
+   - El filtro `JwtFilter` valida el token en cada petición REST, excepto en `/login`.
+
+4. **Actualización del OpenAPI**:
+   - Se añadió el esquema de seguridad `bearerAuth` en el archivo `openapi.json`.
+
+### Frontend
+
+1. **Autenticación**:
+   - El servicio `ServicioAuthREST` realiza el login contra el backend y almacena el JWT.
+
+2. **Peticiones Autenticadas**:
+   - `ServicioVideoREST` incluye el JWT en la cabecera `Authorization` para todas las peticiones.
+
+3. **Gestión del JWT**:
+   - Se añadió una sección en la aplicación para visualizar el JWT y realizar operaciones de encriptación/desencriptación con JWE utilizando `JOSE4j`.
+
+---
+
+## Proyecto HTTPS (httpsApp)
+
+Se añadió un proyecto adicional llamado `httpsApp` para realizar pruebas de HTTPS con un login simple. Este proyecto incluye:
+
+1. **Servlet de Usuarios**:
+   - Gestiona el login y la sesión del usuario.
+   - Redirige al usuario a una página de inicio (`homepage.jsp`) tras un login exitoso.
+
+2. **Páginas JSP**:
+   - `login.jsp`: Formulario de inicio de sesión con validaciones.
+   - `homepage.jsp`: Página de bienvenida que muestra el nombre del usuario autenticado.
+
+3. **Configuración de HTTPS**:
+   - Configuración básica para probar el uso de HTTPS en un entorno local.
+
+---
 
 ## Cómo Ejecutar el Proyecto
 
@@ -120,7 +169,28 @@ Clase de acceso a datos que se comunica con la base de datos mediante JDBC. Ejec
 3. Ejecuta el proyecto desde NetBeans.
 4. Accede a la app en:  
    `http://localhost:8080/Frontend/`
+   
+### 🔒 Proyecto HTTPS (httpsApp)
 
+1. Abre el proyecto **`httpsApp`** en NetBeans.
+2. Configura el servidor Tomcat como el servidor de aplicaciones para este proyecto.
+3. Asegúrate de que el conector HTTPS esté habilitado en el archivo `server.xml` de Tomcat. La configuración básica es la siguiente:
+    ```xml
+    <Connector port="8443" protocol="org.apache.coyote.http11.Http11NioProtocol"
+                maxThreads="150" SSLEnabled="true">
+        <SSLHostConfig>
+            <Certificate certificateKeystoreFile="${user.home}/.keystore"
+                            certificateKeystorePassword="123456"
+                            type="RSA" />
+        </SSLHostConfig>
+    </Connector>````
+- El archivo .keystore debe estar ubicado en el directorio del usuario (${user.home}) y contener un certificado válido.
+- Cambia la contraseña del keystore (123456) según tu configuración.
+4. Ejecuta el proyecto desde NetBeans.
+5. Accede al login en:
+ `https://localhost:8443/httpsApp/vista/login.jsp`
+
+---
 
 ### 📁 Repositorio de Vídeos
 
@@ -146,7 +216,31 @@ Asegúrate de que esa carpeta exista en tu ruta de proyecto local.
 
 - El sistema requiere inicio de sesión para acceder a las funcionalidades principales.
 - Los servlets verifican sesión activa y restringen acciones si no hay permisos.
+- Se utiliza JWT para autenticar las peticiones al backend.
+- Se añadió soporte para encriptar y desencriptar el JWT en el frontend utilizando JWE.
 
+
+## Autenticación y Seguridad
+
+- El sistema requiere inicio de sesión para acceder a las funcionalidades principales.
+- Los servlets verifican sesión activa y restringen acciones si no hay permisos.
+- Se utiliza JWT para autenticar las peticiones al backend.
+- Se añadió soporte para encriptar y desencriptar el JWT en el frontend utilizando JWE.
+- Se realizaron pruebas de HTTPS con el proyecto `httpsApp`.
+
+### Ubicación de las Claves
+
+#### **Backend**
+- La clave secreta utilizada para firmar y validar los JWT está definida en el archivo `JwtConfig.java`:
+  ```java
+  public static final String SECRET_KEY = "0123456789012345678901234567890123456789012345678901234567890123";
+  ```
+#### **Frontend**
+- Las claves utilizadas para operaciones de cifrado están ubicadas en el directorio Frontend/Clave/:
+    - claveVideo.key: Usada para el encriptado de vídeos.
+        - Contenido: 1234567890123456
+    - claveJWE.key: Usada para el cifrado de JWE.
+        - Contiene la clave AES utilizada para encriptar y desencriptar JWT en el frontend.
 ---
 
 ## Autoría Final
