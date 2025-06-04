@@ -232,15 +232,11 @@ Asegúrate de que esa carpeta exista en tu ruta de proyecto local.
 
 #### **Backend**
 - La clave secreta utilizada para firmar y validar los JWT está definida en el archivo `JwtConfig.java`:
-  ```java
-  public static final String SECRET_KEY = "0123456789012345678901234567890123456789012345678901234567890123";
-  ```
 #### **Frontend**
 - Las claves utilizadas para operaciones de cifrado están ubicadas en el directorio Frontend/Clave/:
+    - claveXML.key: Usuada para el encriptado de XML.
     - claveVideo.key: Usada para el encriptado de vídeos.
-        - Contenido: 1234567890123456
     - claveJWE.key: Usada para el cifrado de JWE.
-        - Contiene la clave AES utilizada para encriptar y desencriptar JWT en el frontend.
 ---
 
 ## Autoría Final
