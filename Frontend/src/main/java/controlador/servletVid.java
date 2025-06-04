@@ -114,7 +114,7 @@ public class servletVid extends HttpServlet {
         String realPath = getServletContext().getRealPath("/");
         String basePath = realPath.split("target")[0];
         String folderPath = basePath + "Clave";
-        Path keyPath = Paths.get(folderPath, "clave.key");
+        Path keyPath = Paths.get(folderPath, "claveVideo.key");
         return Files.readString(keyPath).trim();
     }
 

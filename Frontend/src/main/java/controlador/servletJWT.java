@@ -98,7 +98,7 @@ public class servletJWT extends HttpServlet {
     }
 
     /**
-     * Carga la clave AES desde el archivo 'clave.key' ubicado en la carpeta raíz del proyecto.
+     * Carga la clave AES desde el archivo 'claveJWE.key' ubicado en la carpeta raíz del proyecto.
      *
      * @param request Objeto HttpServletRequest necesario para obtener la ruta base del servidor.
      * @return Objeto SecretKey creado a partir de la cadena del archivo.

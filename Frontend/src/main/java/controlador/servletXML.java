@@ -38,7 +38,7 @@ import org.apache.xml.security.utils.EncryptionConstants;
  *
  * URL de acceso: /servletXML
  *
- * Este servlet también requiere una clave AES (clave.key) ubicada en la carpeta
+ * Este servlet también requiere una clave AES (claveXML.key) ubicada en la carpeta
  * `Clave` del proyecto raíz. La clave debe tener exactamente 16 caracteres.
  *
  * @author Kenny Alejandro/Lijie Yin
@@ -255,7 +255,7 @@ public class servletXML extends HttpServlet {
      */
     private SecretKey loadKeyFromFile(HttpServletRequest request) throws Exception {
         String basePath = getServletContext().getRealPath("/");
-        String keyPath = basePath.split("target")[0] + "Clave/claveVideo.key";
+        String keyPath = basePath.split("target")[0] + "Clave/claveXML.key";
         String keyStr = Files.readString(Paths.get(keyPath)).trim();
         if (keyStr.length() != 16) {
             throw new Exception("The key must be 16 characters long.");
